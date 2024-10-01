@@ -35,7 +35,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //SmartDashboard.putData();
   }
 
   @Override
