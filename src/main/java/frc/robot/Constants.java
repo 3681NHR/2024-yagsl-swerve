@@ -23,6 +23,8 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
 
+    public static final Boolean ANGULER_VELOCITY = true;
+    
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
   public static class drive {
