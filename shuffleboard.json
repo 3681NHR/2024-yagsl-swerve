@@ -1,7 +1,233 @@
 {
   "tabPane": [
     {
-      "title": "Tab 1",
+      "title": "SmartDashboard",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 10.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "1,0": {
+            "size": [
+              14,
+              9
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Field",
+              "_title": "/SmartDashboard/Field",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "k2024Crescendo",
+              "Visuals/Robot Icon Size": 10.0,
+              "Visuals/Show Outside Circles": true,
+              "Colors/XModules": "#FFFFFFFF"
+            }
+          },
+          "15,0": {
+            "size": [
+              19,
+              13
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/backleft",
+              "_title": "/SmartDashboard/swerve/modules/backleft",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "34,0": {
+            "size": [
+              19,
+              13
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/backright",
+              "_title": "/SmartDashboard/swerve/modules/backright",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "34,13": {
+            "size": [
+              19,
+              13
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/frontleft",
+              "_title": "/SmartDashboard/swerve/modules/frontleft",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "15,13": {
+            "size": [
+              19,
+              13
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/frontright",
+              "_title": "/SmartDashboard/swerve/modules/frontright",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "53,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Raw IMU Yaw",
+              "_title": "Raw IMU Yaw",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "57,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Adjusted IMU Yaw",
+              "_title": "Adjusted IMU Yaw",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "61,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/moduleCount",
+              "_title": "swerve/moduleCount",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "65,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/robotRotation",
+              "_title": "swerve/robotRotation",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "69,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/maxSpeed",
+              "_title": "swerve/maxSpeed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "73,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/rotationUnit",
+              "_title": "swerve/rotationUnit",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "77,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/sizeLeftRight",
+              "_title": "swerve/sizeLeftRight",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "81,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/sizeFrontBack",
+              "_title": "swerve/sizeFrontBack",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "85,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/forwardDirection",
+              "_title": "swerve/forwardDirection",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "89,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/swerve/maxAngularVelocity",
+              "_title": "swerve/maxAngularVelocity",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "LiveWindow",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 10.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Tab 3",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -11,24 +237,89 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "22,11": {
+          "53,11": {
             "size": [
-              16,
-              13
+              10,
+              10
             ],
             "content": {
-              "_type": "Graph",
+              "_type": "Gyro",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/backleft/Raw Absolute Encoder",
+              "_title": "SmartDashboard/swerve/modules/backleft/Raw Absolute Encoder",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "63,11": {
+            "size": [
+              10,
+              10
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/backright/Raw Absolute Encoder",
+              "_title": "SmartDashboard/swerve/modules/backright/Raw Absolute Encoder",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "53,1": {
+            "size": [
+              10,
+              10
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/frontleft/Raw Absolute Encoder",
+              "_title": "SmartDashboard/swerve/modules/frontleft/Raw Absolute Encoder",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "63,1": {
+            "size": [
+              10,
+              10
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///SmartDashboard/swerve/modules/frontright/Raw Absolute Encoder",
+              "_title": "SmartDashboard/swerve/modules/frontright/Raw Absolute Encoder",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "32,11": {
+            "size": [
+              14,
+              14
+            ],
+            "content": {
+              "_type": "Gyro",
               "_source0": "network_table:///SmartDashboard/swerve/robotRotation",
               "_title": "SmartDashboard/swerve/robotRotation",
               "_glyph": 148,
               "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/swerve/robotRotation": true
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": true
             }
           }
         }
@@ -36,9 +327,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
-    "width": 1920.0,
-    "height": 1040.0
+    "x": -1928.0,
+    "y": 164.0,
+    "width": 1936.0,
+    "height": 1056.0
   }
 }
