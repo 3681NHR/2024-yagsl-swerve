@@ -7,8 +7,13 @@ package frc.robot.subsystems;
 import java.io.File;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,7 +21,10 @@ import frc.robot.Constants;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+/** swervedrive using YAGSL */
 public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
@@ -34,6 +42,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     drive.setCosineCompensator(RobotBase.isReal());
 
+    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
   }
 
   
@@ -82,5 +92,36 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   {
     drive.driveFieldOriented(velocity);
   }
+
+  /**
+   * Setup AutoBuilder for PathPlanner.
+   */
+  public void setupPathPlanner()
+  {
+    AutoBuilder.configureHolonomic(
+        drive::getPose,
+        drive::resetOdometry,
+        drive::getRobotVelocity,
+        drive::setChassisSpeeds,
+        new HolonomicPathFollowerConfig(
+                                         Constants.AutoConstants.TRANSLATION_PID,
+                                         Constants.AutoConstants.ANGLE_PID,
+                                         4.5,
+                                         // Max module speed, in m/s
+                                         drive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+                                         // Drive base radius in meters. Distance from robot center to furthest module.
+                                         new ReplanningConfig()
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          var alliance = DriverStation.getAlliance();
+          return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+        },
+        this // Reference to this subsystem to set requirements
+                                  );
+  }
+
 
 }

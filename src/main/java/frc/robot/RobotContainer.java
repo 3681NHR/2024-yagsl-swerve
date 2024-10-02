@@ -5,8 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.io.File;
@@ -19,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
 
   private final CommandXboxController m_driverController =
@@ -62,6 +59,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return null;
   }
 }
