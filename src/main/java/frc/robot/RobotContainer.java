@@ -9,6 +9,8 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.io.File;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -59,6 +61,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    PathPlannerAuto auto = new PathPlannerAuto("a1");
+    return auto;
   }
 }

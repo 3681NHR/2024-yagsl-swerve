@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,6 +31,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final SwerveDrive drive;
 
   public SwerveDriveSubsystem(File directory) {
+    
     try
     {
       drive = new SwerveParser(directory).createSwerveDrive(Constants.drive.MAX_SPEED);
@@ -44,6 +46,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    setupPathPlanner();
   }
 
   
@@ -99,10 +102,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void setupPathPlanner()
   {
     AutoBuilder.configureHolonomic(
-        drive::getPose,
-        drive::resetOdometry,
-        drive::getRobotVelocity,
-        drive::setChassisSpeeds,
+        this::getPose,
+        this::resetOdometry,
+        this::getRobotVelocity,
+        this::setChassisSpeeds,
         new HolonomicPathFollowerConfig(
                                          Constants.AutoConstants.TRANSLATION_PID,
                                          Constants.AutoConstants.ANGLE_PID,
@@ -121,6 +124,22 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
                                   );
+  }
+  public ChassisSpeeds getRobotVelocity()
+  {
+    return drive.getRobotVelocity();
+  }
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds)
+  {
+    drive.setChassisSpeeds(chassisSpeeds);
+  }
+  public Pose2d getPose()
+  {
+    return drive.getPose();
+  }
+  public void resetOdometry(Pose2d initialHolonomicPose)
+  {
+    drive.resetOdometry(initialHolonomicPose);
   }
 
 
