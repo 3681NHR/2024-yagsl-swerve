@@ -24,6 +24,6 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
   public static class drive {
-    public static final double MAX_SPEED = 100; //max drive speed, m/s
+    public static final double MAX_SPEED = 10; //max drive speed, m/s
   }
 }

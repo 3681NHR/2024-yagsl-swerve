@@ -17,10 +17,7 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "open": true,
-        "swerve": {
-          "open": true
-        }
+        "open": true
       }
     }
   },
