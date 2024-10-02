@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -163,5 +164,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.resetOdometry(initialHolonomicPose);
   }
 
+  public Translation2d getPivot(BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br){
 
+    if(fl.getAsBoolean()){
+      //drive.getmod
+    }
+
+    return new Translation2d();
+  }
 }

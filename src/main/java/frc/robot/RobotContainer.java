@@ -56,14 +56,14 @@ public class RobotContainer {
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = swerveDriveSubsystem.driveCommand(
-      () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> m_driverController.getRightX() * 0.5);
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> -m_driverController.getRightX() * 0.5);
 
     Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveCommand(
-      () -> MathUtil.applyDeadband(m_driverController.getRawAxis(2), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(m_driverController.getRawAxis(3), OperatorConstants.LEFT_X_DEADBAND),
-      () -> m_driverController.getRawAxis(4));
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(3), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -m_driverController.getRawAxis(4));
 
 
     if(Constants.OperatorConstants.ANGULER_VELOCITY){
