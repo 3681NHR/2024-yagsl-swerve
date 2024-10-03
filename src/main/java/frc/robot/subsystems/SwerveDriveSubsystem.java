@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -42,7 +43,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
 
-    drive.setCosineCompensator(RobotBase.isReal());
+    drive.setCosineCompensator(!RobotBase.isSimulation());
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -83,6 +84,27 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         headingY.getAsDouble(),
         drive.getOdometryHeading().getRadians(),
         drive.getMaximumVelocity()));
+    });
+  }
+
+  /**
+   * Command to drive the robot using translative values and heading as angular velocity.
+   *
+   * @param translationX     Translation in the X direction. Cubed for smoother controls.
+   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
+   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
+   * @return Drive command.
+   */
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  {
+    return run(() -> {
+      // Make the robot move
+      drive.drive(SwerveMath.scaleTranslation(new Translation2d(
+                            translationX.getAsDouble() * drive.getMaximumVelocity(),
+                            translationY.getAsDouble() * drive.getMaximumVelocity()), 0.8),
+                        Math.pow(angularRotationX.getAsDouble(), 3) * drive.getMaximumAngularVelocity(),
+                        true,
+                        false);
     });
   }
 
@@ -142,5 +164,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.resetOdometry(initialHolonomicPose);
   }
 
+  public Translation2d getPivot(BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br){
 
+    if(fl.getAsBoolean()){
+      //drive.getmod
+    }
+
+    return new Translation2d();
+  }
 }
