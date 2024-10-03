@@ -15,6 +15,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,8 +26,8 @@ public class RobotContainer {
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
   private final SendableChooser<Command> autoChooser;
 
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private final XboxController m_driverController =
+      new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
 
   public RobotContainer() {
     configureBindings();
@@ -37,39 +38,57 @@ public class RobotContainer {
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveCommand(
-        () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> -m_driverController.getRightX(),
-        () -> -m_driverController.getRightY()
-        );
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -m_driverController.getRightX(),
+      () -> -m_driverController.getRightY(),
+      () -> m_driverController.getLeftTriggerAxis()>0.5,
+      () -> m_driverController.getRightTriggerAxis()>0.5,
+      () -> m_driverController.getLeftBumper(),
+      () -> m_driverController.getRightBumper()
+    );
 
     Command driveFieldOrientedDirectAngleSim = swerveDriveSubsystem.driveCommand(
-        () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(1), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
-        () -> -m_driverController.getRawAxis(4),
-        () -> -m_driverController.getRawAxis(5)
-        );
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(1), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -m_driverController.getRawAxis(4),
+      () -> -m_driverController.getRawAxis(5),
+      () -> m_driverController.getLeftTriggerAxis()>0.5,
+      () -> m_driverController.getRightTriggerAxis()>0.5,
+      () -> m_driverController.getLeftBumper(),
+      () -> m_driverController.getRightBumper()
+    );
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    Command driveFieldOrientedAnglularVelocity = swerveDriveSubsystem.driveCommand(
+    Command driveFieldOrientedAnglularVelocity = swerveDriveSubsystem.driveAVCommand(
       () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
       () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> -m_driverController.getRightX() * 0.5);
+      () -> -m_driverController.getRightX() * 0.5,
+      () -> m_driverController.getLeftTriggerAxis()>0.5,
+      () -> m_driverController.getRightTriggerAxis()>0.5,
+      () -> m_driverController.getLeftBumper(),
+      () -> m_driverController.getRightBumper()
+    );
 
-    Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveCommand(
+    Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveAVCommand(
       () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(1), OperatorConstants.LEFT_Y_DEADBAND),
       () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
-      () -> -m_driverController.getRawAxis(4));
+      () -> -m_driverController.getRawAxis(4),
+      () -> m_driverController.getLeftTriggerAxis()>0.5,
+      () -> m_driverController.getRightTriggerAxis()>0.5,
+      () -> m_driverController.getLeftBumper(),
+      () -> m_driverController.getRightBumper()
+    );
 
 
     if(Constants.OperatorConstants.ANGULER_VELOCITY){
-    swerveDriveSubsystem.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAngulerVelocitySim);
-    } else {
+    //swerveDriveSubsystem.setDefaultCommand(
+    //    !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAngulerVelocitySim);
+    //} else {
     swerveDriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
     }
