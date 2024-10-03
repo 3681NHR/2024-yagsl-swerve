@@ -1,0 +1,37 @@
+<dashboard-tab
+    tab-name="smartDashboard"
+    slot="tab"
+    source-provider="NetworkTables"
+    source-key="/SmartDashboard"
+    selected=""
+><frc-swerve-drivebase
+        source-provider="NetworkTables"
+        style="transform: translate(827px, 100px); width: 180px; height: 190px;"
+        source-key="/SmartDashboard/swerve"
+        wheellocations="[2.5,2,2.5,-2,-2.5,2,-2.5,-2]"
+        measuredstates="[0,0,0,0,0,0,0,0]"
+        desiredstates="[0,0,0,0,0,0,0,0]"
+        maxspeed="5"
+        rotationunit="degrees"
+        sizeleftright="4"
+        sizefrontback="4"
+    ></frc-swerve-drivebase><frc-field-wrapper
+        source-key="/SmartDashboard/Field"
+        source-provider="NetworkTables"
+        style="transform: translate(0px, 0px); width: 724px; height: 313px;"
+        game="Crescendo"
+    >
+    </frc-field-wrapper><frc-basic-fms-info
+        source-provider="NetworkTables"
+        style="transform: translate(365px, 314px); width: 390.672px; height: 156px;"
+    ></frc-basic-fms-info><frc-gyro
+        source-provider="NetworkTables"
+        style="transform: translate(767px, 392px); width: 300px; height: 328px;"
+    ></frc-gyro><frc-network-alerts
+        source-provider="NetworkTables"
+        style="transform: translate(17px, 316px); width: 332px; height: 205px;"
+        source-key="/SmartDashboard"
+        errors="[]"
+        warnings="[]"
+        infos="[]"
+    ></frc-network-alerts></dashboard-tab>
