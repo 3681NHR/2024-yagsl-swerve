@@ -86,9 +86,9 @@ public class RobotContainer {
 
 
     if(Constants.OperatorConstants.ANGULER_VELOCITY){
-    //swerveDriveSubsystem.setDefaultCommand(
-    //    !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAngulerVelocitySim);
-    //} else {
+    swerveDriveSubsystem.setDefaultCommand(
+        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAngulerVelocitySim);
+    } else {
     swerveDriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
     }

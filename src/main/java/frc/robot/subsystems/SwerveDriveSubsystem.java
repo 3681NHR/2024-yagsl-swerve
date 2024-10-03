@@ -13,6 +13,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,6 +36,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
 
+  private       Vision  vision;
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  private final boolean visionDriveTest = false;
+
   public SwerveDriveSubsystem(File directory) {
     
     try
@@ -51,12 +57,25 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     setupPathPlanner();
+
+    if (visionDriveTest)
+    {
+      setupPhotonVision();
+      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
+      drive.stopOdometryThread();
+    }
   }
 
   
 
   @Override
   public void periodic() {
+    // When vision is enabled we must manually update odometry in SwerveDrive
+    if (visionDriveTest)
+    {
+      drive.updateOdometry();
+      vision.updatePoseEstimation(drive);
+    }
   }
 
   @Override
@@ -260,4 +279,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       return new Translation2d();
     }
   }
+
+  /**
+   * Setup the photon vision class.
+   */
+  public void setupPhotonVision()
+  {
+    vision = new Vision(drive::getPose, drive.field);
+  }
+
 }
