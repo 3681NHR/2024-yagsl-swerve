@@ -44,8 +44,8 @@ public class RobotContainer {
         );
 
     Command driveFieldOrientedDirectAngleSim = swerveDriveSubsystem.driveCommand(
-        () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(3), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(1), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
         () -> -m_driverController.getRawAxis(4),
         () -> -m_driverController.getRawAxis(5)
         );
@@ -61,8 +61,8 @@ public class RobotContainer {
       () -> -m_driverController.getRightX() * 0.5);
 
     Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveCommand(
-      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(3), OperatorConstants.LEFT_X_DEADBAND),
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(1), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
       () -> -m_driverController.getRawAxis(4));
 
 
