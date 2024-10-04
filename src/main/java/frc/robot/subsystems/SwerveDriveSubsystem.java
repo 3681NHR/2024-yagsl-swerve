@@ -245,11 +245,25 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   {
     return drive.getPose();
   }
+  /**
+   * reset odometry to given pose2d
+   * @param initialHolonomicPose
+   */
   public void resetOdometry(Pose2d initialHolonomicPose)
   {
     drive.resetOdometry(initialHolonomicPose);
   }
 
+  /**
+   * get center of rotation based on booleanSuppliers for each corner
+   * if fl is true, rotation center would be t2d for fl module
+   * if multiple boolsupliers are true, output will be average of corrisponding positions
+   * @param fl - booleanSupplier for front left  corner
+   * @param fr - booleanSupplier for front right corner
+   * @param bl - booleanSupplier for back  left  corner
+   * @param br - booleanSupplier for back  right corner
+   * @return translation2d for rotation center
+   */
   public Translation2d getPivot(BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br){
 
     ArrayList<Translation2d> positions = new ArrayList<>();

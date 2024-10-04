@@ -1,17 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.io.File;
-import java.util.Optional;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -19,7 +12,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
@@ -39,11 +31,11 @@ public class RobotContainer {
                         //Trigger button = new Trigger(m_driverController.getAButton());
                         // button.onTrue([Command]);
 
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
+    
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
+    // sim command used raw axis for simulating joysticks
+    // bumpers and triggers control center of rotation, usefull for evasive meneuvers
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveCommand(
       () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
@@ -54,7 +46,6 @@ public class RobotContainer {
       () -> m_driverController.getLeftBumper(),
       () -> m_driverController.getRightBumper()
     );
-
     Command driveFieldOrientedDirectAngleSim = swerveDriveSubsystem.driveCommand(
       () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
@@ -66,11 +57,10 @@ public class RobotContainer {
       () -> m_driverController.getRightBumper()
     );
 
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
+    // sim command used raw axis for simulating joysticks
+    // bumpers and triggers control center of rotation, usefull for evasive meneuvers
     Command driveFieldOrientedAnglularVelocity = swerveDriveSubsystem.driveAVCommand(
       () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
@@ -80,7 +70,6 @@ public class RobotContainer {
       () -> m_driverController.getLeftBumper(),
       () -> m_driverController.getRightBumper()
     );
-
     Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveAVCommand(
       () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
@@ -93,15 +82,18 @@ public class RobotContainer {
 
 
     if(Constants.OperatorConstants.ANGULER_VELOCITY){
-    swerveDriveSubsystem.setDefaultCommand(
+      // set default command, this command will run until interupted by another command
+      // set to sim command when in simulator, this allows propper simulation of inputs
+      swerveDriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAngulerVelocitySim);
     } else {
-    swerveDriveSubsystem.setDefaultCommand(
+      swerveDriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
     }
 
+    // build auto chooser from pathplanner autos
+    // add auto chooser to networktables
     autoChooser = AutoBuilder.buildAutoChooser();
-
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
@@ -115,14 +107,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    //PathPlannerAuto auto = new PathPlannerAuto("a1");
+    //return selected auto from networktables
     Command auto = autoChooser.getSelected();
     return auto;
   }
 
   /**
-   * process number
+   * process input value
    * @param val - number to process
    * @param multiplier - multiplier for input, mainly used for inverting
    * @param square - polynomial curve value, roughly y=x^s {@link https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#squaring-inputs}

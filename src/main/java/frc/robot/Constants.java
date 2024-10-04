@@ -17,14 +17,16 @@ import com.pathplanner.lib.util.PIDConstants;
 public final class Constants {
   public static class OperatorConstants
   {
-    // Joystick Deadband
+    // Joystick Deadbands
     public static final double LEFT_X_DEADBAND  = 0.1;
     public static final double LEFT_Y_DEADBAND  = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double RIGHT_Y_DEADBAND = 0.1;
 
+    //is using anguler velocity controls instead of direct angle
     public static final Boolean ANGULER_VELOCITY = true;
     
+    //usb port of driver controller, remember to assign controller to port in driverstation
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
   public static class drive {
@@ -32,6 +34,7 @@ public final class Constants {
   }
   public static final class AutoConstants
   {
+    //PID constants for auto
     public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
     public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
   }
