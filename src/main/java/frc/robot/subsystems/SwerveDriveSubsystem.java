@@ -31,7 +31,9 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
-/** swervedrive using YAGSL */
+/** swervedrive using YAGSL, this allows configuration using json files
+ * YAGSL also handles kinematics and odometry for the drive
+ */
 public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
@@ -40,6 +42,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   private final boolean visionDriveTest = false;
 
+  /**
+   * YAGSL swerve subsystem constructor
+   * @param directory - directory of YAGSL config json
+   */
   public SwerveDriveSubsystem(File directory) {
     
     try
