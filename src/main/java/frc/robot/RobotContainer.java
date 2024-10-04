@@ -37,8 +37,8 @@ public class RobotContainer {
     // sim command used raw axis for simulating joysticks
     // bumpers and triggers control center of rotation, usefull for evasive meneuvers
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveCommand(
-      () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getLeftY(), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getLeftX(), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
@@ -47,8 +47,8 @@ public class RobotContainer {
       () -> m_driverController.getRightBumper()
     );
     Command driveFieldOrientedDirectAngleSim = swerveDriveSubsystem.driveCommand(
-      () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(1), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(0), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
@@ -62,18 +62,18 @@ public class RobotContainer {
     // sim command used raw axis for simulating joysticks
     // bumpers and triggers control center of rotation, usefull for evasive meneuvers
     Command driveFieldOrientedAnglularVelocity = swerveDriveSubsystem.driveAVCommand(
-      () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRightX(), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getLeftY(), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getLeftX(), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRightX(), -1.0, OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
       () -> m_driverController.getRightBumper()
     );
     Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveAVCommand(
-      () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(1), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(0), -1.0, OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(4), -1.0, OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
@@ -114,22 +114,27 @@ public class RobotContainer {
 
   /**
    * process input value
+   * 
+   * curve function graphed here {@link https://www.desmos.com/calculator/aipfc6wivm}
    * @param val - number to process
    * @param multiplier - multiplier for input, mainly used for inverting
    * @param square - polynomial curve value, roughly y=x^s {@link https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#squaring-inputs}
-   * @param deadBand - deadband for input {@link https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#input-deadband}
+   * @param deadZone - deadzone for input {@link https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#input-deadband}
    * @return
    */
-  private double processInput(Double val, Double multiplier, Double square, Double deadBand){
+  private double processInput(Double val, Double multiplier, Double square, Double deadZone){
     double out = val;
 
     if(multiplier != null){out *= multiplier;                           }
-    if(square     != null){out  = square(out, square);                  }
-    if(deadBand   != null){out  = MathUtil.applyDeadband(out, deadBand);}
+    if(square     != null){
+      if(deadZone   != null){
+        out  = Math.signum(val) * Math.pow(Math.abs((1+deadZone)*val)-deadZone, square);
+      } else {
+        out  = Math.signum(val) * Math.pow(Math.abs(val), square);
+      }
+    }
+    if(deadZone   != null){out  = MathUtil.applyDeadband(out, deadZone);}
 
     return out;
-  }
-  private double square(double val, double mag){
-    return Math.signum(val) * Math.pow(Math.abs(val), mag);
   }
 }

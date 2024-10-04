@@ -1,31 +1,25 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
+
+import frc.robot.Constants;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import swervelib.SwerveDrive;
-import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -40,7 +34,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private       Vision  vision;
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  private final boolean visionDriveTest = false;
+  private final boolean visionEnabled = false;
 
   /**
    * YAGSL swerve subsystem constructor
@@ -48,11 +42,23 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public SwerveDriveSubsystem(File directory) {
     
+    // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
+    //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
+    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8);
+    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION).
+    //  In this case the wheel diameter is 4 inches, which must be converted to meters to get meters/second.
+    //  The gear ratio is 6.75 motor revolutions per wheel rotation.
+    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
+    System.out.println("\"conversionFactors\": {");
+    System.out.println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
+    System.out.println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
+    System.out.println("}");
+    
     try
     {
       drive = new SwerveParser(directory).createSwerveDrive(Constants.drive.MAX_SPEED);
-      // Alternative method if you don't want to supply the conversion factor via JSON files.
-      // drive = new SwerveParser(directory).createdrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
@@ -60,11 +66,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     drive.setCosineCompensator(!RobotBase.isSimulation());
 
-    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     setupPathPlanner();
-
-    if (visionDriveTest)
+    if (visionEnabled)
     {
       setupPhotonVision();
       // Stop the odometry thread if we are using vision that way we can synchronize updates better.
@@ -77,7 +81,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
+    if (visionEnabled)
     {
       drive.updateOdometry();
       vision.updatePoseEstimation(drive);
@@ -100,8 +104,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY)
   {
-    // drive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
+      drive.setHeadingCorrection(true);
 
       Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
         translationY.getAsDouble()), 0.8);
@@ -126,6 +130,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
     return run(() -> {
+      drive.setHeadingCorrection(false);
       // Make the robot move
       drive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             translationX.getAsDouble() * drive.getMaximumVelocity(),
@@ -143,6 +148,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param translationY Translation in the Y direction. Cubed for smoother controls.
    * @param headingX     Heading X to calculate angle of the joystick.
    * @param headingY     Heading Y to calculate angle of the joystick.
+   * 
+   * fl, fr, bl, br - boolSupplier for rotation point buttons
+   * 
    * @return Drive command.
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br)
