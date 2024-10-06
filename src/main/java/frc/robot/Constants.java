@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -34,7 +36,7 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
   public static class drive {
-    public static final double MAX_SPEED = 10; //max drive speed, m/s
+    public static final double MAX_SPEED = Units.feetToMeters(15); //max drive speed, m/s
   }
   public static final class AutoConstants
   {
