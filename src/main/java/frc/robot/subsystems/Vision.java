@@ -17,6 +17,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
 import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -475,7 +478,7 @@ public class Vision
       if (Robot.isSimulation())
       {
         systemSim.addCamera(cameraSim, robotToCamTransform);
-//        cameraSim.enableDrawWireframe(true);
+        cameraSim.enableDrawWireframe(true);
       }
     }
   }

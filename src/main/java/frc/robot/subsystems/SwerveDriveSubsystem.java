@@ -34,7 +34,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private       Vision  vision;
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  private final boolean visionEnabled = false;
+  private final boolean visionEnabled = true;
 
   /**
    * YAGSL swerve subsystem constructor
