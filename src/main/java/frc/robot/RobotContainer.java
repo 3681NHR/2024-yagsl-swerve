@@ -44,8 +44,8 @@ public class RobotContainer {
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveCommand(
       () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getRightX(), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRightY(), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
@@ -71,8 +71,8 @@ public class RobotContainer {
     Command driveFieldOrientedAngulerVelocity = swerveDriveSubsystem.driveCommand(
       () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getRightX(), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRightY(), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),

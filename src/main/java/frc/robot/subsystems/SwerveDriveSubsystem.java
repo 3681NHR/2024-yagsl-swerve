@@ -33,7 +33,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final SwerveDrive drive;
 
   private       Vision  vision;
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   private final boolean visionEnabled = true;
 
   /**
@@ -67,7 +67,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.setCosineCompensator(!RobotBase.isSimulation());
     drive.setChassisDiscretization(true, 0.02);
 
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.INFO;
 
     setupPathPlanner();
     if (visionEnabled)
