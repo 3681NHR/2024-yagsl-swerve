@@ -96,70 +96,21 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Command to drive the robot using translative values and heading as a setpoint.
+   * Command to drive the robot using translative values and heading as a setpoint, or anguler velocity
    *
    * @param translationX Translation in the X direction. Cubed for smoother controls.
    * @param translationY Translation in the Y direction. Cubed for smoother controls.
-   * @param headingX     Heading X to calculate angle of the joystick.
-   * @param headingY     Heading Y to calculate angle of the joystick.
-   * @return Drive command.
-   */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY)
-  {
-    drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
-    return run(() -> {
-      drive.setHeadingCorrection(true);
-
-      Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
-        translationY.getAsDouble()), 0.8);
-
-      // Make the robot move
-      driveFieldOriented(drive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
-        headingX.getAsDouble(),
-        headingY.getAsDouble(),
-        drive.getOdometryHeading().getRadians(),
-        drive.getMaximumVelocity()));
-    });
-  }
-
-  /**
-   * Command to drive the robot using translative values and heading as angular velocity.
-   *
-   * @param translationX     Translation in the X direction. Cubed for smoother controls.
-   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
-   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
-   * @return Drive command.
-   */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
-  {
-    drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
-    return run(() -> {
-      drive.setHeadingCorrection(false);
-      // Make the robot move
-      drive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                            translationX.getAsDouble() * drive.getMaximumVelocity(),
-                            translationY.getAsDouble() * drive.getMaximumVelocity()), 0.8),
-                        Math.pow(angularRotationX.getAsDouble(), 3) * drive.getMaximumAngularVelocity(),
-                        true,
-                        false);
-    });
-  }
-
-  /**
-   * Command to drive the robot using translative values and heading as a setpoint.
-   *
-   * @param translationX Translation in the X direction. Cubed for smoother controls.
-   * @param translationY Translation in the Y direction. Cubed for smoother controls.
-   * @param headingX     Heading X to calculate angle of the joystick.
-   * @param headingY     Heading Y to calculate angle of the joystick.
+   * @param headingX     Heading X to calculate angle of the joystick. anguler velocity when angulervel is true
+   * @param headingY     Heading Y to calculate angle of the joystick. unused when angulerVel is true
    * 
    * fl, fr, bl, br - boolSupplier for rotation point buttons
    * 
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br)
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br, BooleanSupplier angle)
   {
 
+    if(angle.getAsBoolean()){
     drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
     return run(() -> {
 
@@ -174,6 +125,19 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         drive.getMaximumVelocity()),
         getPivot(fl, fr, bl, br));
     });
+    } else {
+    drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
+    return run(() -> {
+      // Make the robot move
+      drive.drive(SwerveMath.scaleTranslation(new Translation2d(
+                            translationX.getAsDouble() * drive.getMaximumVelocity(),
+                            translationY.getAsDouble() * drive.getMaximumVelocity()), 0.8),
+                        Math.pow(headingX.getAsDouble(), 3) * drive.getMaximumAngularVelocity(),
+                        true,
+                        false,
+                        getPivot(fl, fr, bl, br));
+    });
+    }
   }
 
   /**
@@ -184,8 +148,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
    * @return Drive command.
    */
-  public Command driveAVCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br)
+  /*
+  public Command driveAVCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br, BooleanSupplier change)
   {
+    if(change.getAsBoolean()){
+      return driveCommand(translationX, translationY, translationY, angularRotationX, fl, fr, bl, br);
+    }
     drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
     return run(() -> {
       // Make the robot move
@@ -198,6 +166,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                         getPivot(fl, fr, bl, br));
     });
   }
+  */
 
    /**
    * Drive the robot given a chassis field oriented velocity.

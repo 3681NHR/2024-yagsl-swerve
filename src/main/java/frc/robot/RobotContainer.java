@@ -22,6 +22,9 @@ public class RobotContainer {
   //sendable chooser for selecting auto programs using dashboard
   private final SendableChooser<Command> autoChooser;
 
+  private final int swapAngleButtonID = 10;
+
+
   //driver Xbox controller, handles input
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
@@ -46,7 +49,8 @@ public class RobotContainer {
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
-      () -> m_driverController.getRightBumper()
+      () -> m_driverController.getRightBumper(),
+      () -> !m_driverController.getRawButton(swapAngleButtonID)
     );
     Command driveFieldOrientedDirectAngleSim = swerveDriveSubsystem.driveCommand(
       () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
@@ -56,30 +60,35 @@ public class RobotContainer {
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
-      () -> m_driverController.getRightBumper()
+      () -> m_driverController.getRightBumper(),
+      () -> !m_driverController.getRawButton(swapAngleButtonID)
     );
 
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     // sim command used raw axis for simulating joysticks
     // bumpers and triggers control center of rotation, usefull for evasive meneuvers
-    Command driveFieldOrientedAnglularVelocity = swerveDriveSubsystem.driveAVCommand(
-      () -> processInput(m_driverController.getLeftY(), -1.0,  null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getLeftX(), -1.0,  null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRightX(), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+    Command driveFieldOrientedAngulerVelocity = swerveDriveSubsystem.driveCommand(
+      () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
-      () -> m_driverController.getRightBumper()
+      () -> m_driverController.getRightBumper(),
+      () -> m_driverController.getRawButton(swapAngleButtonID)
     );
-    Command driveFieldOrientedAngulerVelocitySim = swerveDriveSubsystem.driveAVCommand(
+    Command driveFieldOrientedAnglularVelocitySim = swerveDriveSubsystem.driveCommand(
       () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
       () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
-      () -> m_driverController.getRightBumper()
+      () -> m_driverController.getRightBumper(),
+      () -> m_driverController.getRawButton(swapAngleButtonID)
     );
 
 
@@ -87,7 +96,7 @@ public class RobotContainer {
       // set default command, this command will run until interupted by another command
       // set to sim command when in simulator, this allows propper simulation of inputs
       swerveDriveSubsystem.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAngulerVelocitySim);
+        !RobotBase.isSimulation() ? driveFieldOrientedAngulerVelocity : driveFieldOrientedAnglularVelocitySim);
     } else {
       swerveDriveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);

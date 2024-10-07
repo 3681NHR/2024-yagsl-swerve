@@ -14,19 +14,37 @@
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/VisionSystemSim-Vision/Sim Field": "Field2d"
+    },
+    "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
-    "Transitory Values": {
+    "Retained Values": {
       "open": false
     },
     "transitory": {
+      "CameraPublisher": {
+        "center-processed": {
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
         "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "Server": {
+      "Publishers": {
+        "open": true
+      }
+    },
     "visible": true
   }
 }
