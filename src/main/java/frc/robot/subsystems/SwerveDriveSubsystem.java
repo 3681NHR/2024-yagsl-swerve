@@ -65,8 +65,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     drive.setCosineCompensator(!RobotBase.isSimulation());
+    drive.setChassisDiscretization(true, 0.02);
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+
     setupPathPlanner();
     if (visionEnabled)
     {
@@ -104,6 +106,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY)
   {
+    drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
     return run(() -> {
       drive.setHeadingCorrection(true);
 
@@ -129,6 +132,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
+    drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
     return run(() -> {
       drive.setHeadingCorrection(false);
       // Make the robot move
@@ -155,7 +159,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br)
   {
-    // drive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+
+    drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
     return run(() -> {
 
       Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
@@ -181,6 +186,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public Command driveAVCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br)
   {
+    drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
     return run(() -> {
       // Make the robot move
       drive.drive(SwerveMath.scaleTranslation(new Translation2d(
@@ -314,6 +320,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void setupPhotonVision()
   {
     vision = new Vision(drive::getPose, drive.field);
+  }
+
+  public void lock(){
+    drive.lockPose();
   }
 
 }
