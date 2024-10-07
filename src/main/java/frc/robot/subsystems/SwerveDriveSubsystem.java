@@ -9,8 +9,8 @@ import java.util.function.DoubleSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+//import edu.wpi.first.apriltag.AprilTagFieldLayout;
+//import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -63,7 +63,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     {
       throw new RuntimeException(e);
     }
-
+    //cosine compensator is very helpfull, but works wierd in simulation
     drive.setCosineCompensator(!RobotBase.isSimulation());
     drive.setChassisDiscretization(true, 0.02);
 
@@ -82,7 +82,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // When vision is enabled we must manually update odometry in SwerveDrive
+    // When vision is enabled we must manually update odometry in SwerveDrive since we canceled the odometry thread
     if (visionEnabled)
     {
       drive.updateOdometry();
@@ -96,15 +96,19 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Command to drive the robot using translative values and heading as a setpoint, or anguler velocity
+   * Command to drive the robot using translative and rotational values
+   * <p> if angle is true, uses heading as setppoint for angle pid
+   * <p> if angle is false, used headingX for anguler velocity
    *
    * @param translationX Translation in the X direction. Cubed for smoother controls.
    * @param translationY Translation in the Y direction. Cubed for smoother controls.
-   * @param headingX     Heading X to calculate angle of the joystick. anguler velocity when angulervel is true
-   * @param headingY     Heading Y to calculate angle of the joystick. unused when angulerVel is true
-   * 
-   * fl, fr, bl, br - boolSupplier for rotation point buttons
-   * 
+   * @param headingX     Heading X to calculate angle of the joystick. anguler velocity when angle is true
+   * @param headingY     Heading Y to calculate angle of the joystick. unused when angle is true
+   * @param fl - boolSupplier for rotation point buttons
+   * @param fr - boolSupplier for rotation point buttons
+   * @param bl - boolSupplier for rotation point buttons
+   * @param br - boolSupplier for rotation point buttons
+   * @param angle weather to use direct angle control or anguler velocity control
    * @return Drive command.
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br, BooleanSupplier angle)
@@ -118,7 +122,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         translationY.getAsDouble()), 0.8);
 
       // Make the robot move
-      driveFieldOriented(drive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
+      drive.driveFieldOriented(drive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
         headingX.getAsDouble(),
         headingY.getAsDouble(),
         drive.getOdometryHeading().getRadians(),
@@ -138,53 +142,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                         getPivot(fl, fr, bl, br));
     });
     }
-  }
-
-  /**
-   * Command to drive the robot using translative values and heading as angular velocity.
-   *
-   * @param translationX     Translation in the X direction. Cubed for smoother controls.
-   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
-   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
-   * @return Drive command.
-   */
-  /*
-  public Command driveAVCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br, BooleanSupplier change)
-  {
-    if(change.getAsBoolean()){
-      return driveCommand(translationX, translationY, translationY, angularRotationX, fl, fr, bl, br);
-    }
-    drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
-    return run(() -> {
-      // Make the robot move
-      drive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                            translationX.getAsDouble() * drive.getMaximumVelocity(),
-                            translationY.getAsDouble() * drive.getMaximumVelocity()), 0.8),
-                        Math.pow(angularRotationX.getAsDouble(), 3) * drive.getMaximumAngularVelocity(),
-                        true,
-                        false,
-                        getPivot(fl, fr, bl, br));
-    });
-  }
-  */
-
-   /**
-   * Drive the robot given a chassis field oriented velocity.
-   *
-   * @param velocity Velocity according to the field.
-   */
-  public void driveFieldOriented(ChassisSpeeds velocity)
-  {
-    drive.driveFieldOriented(velocity);
-  }
-  /**
-   * Drive the robot given a chassis field oriented velocity.
-   *
-   * @param velocity Velocity according to the field.
-   */
-  public void driveFieldOriented(ChassisSpeeds velocity, Translation2d centerOfRotationMeters)
-  {
-    drive.driveFieldOriented(velocity, centerOfRotationMeters);
   }
 
   /**
@@ -216,26 +173,17 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         this // Reference to this subsystem to set requirements
                                   );
   }
-  public ChassisSpeeds getRobotVelocity()
-  {
-    return drive.getRobotVelocity();
-  }
-  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds)
-  {
-    drive.setChassisSpeeds(chassisSpeeds);
-  }
-  public Pose2d getPose()
-  {
-    return drive.getPose();
-  }
+  
+  public ChassisSpeeds getRobotVelocity(){return drive.getRobotVelocity();}
+  
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds){drive.setChassisSpeeds(chassisSpeeds);}
+  
+  public Pose2d getPose(){return drive.getPose();}
   /**
    * reset odometry to given pose2d
    * @param initialHolonomicPose
    */
-  public void resetOdometry(Pose2d initialHolonomicPose)
-  {
-    drive.resetOdometry(initialHolonomicPose);
-  }
+  public void resetOdometry(Pose2d initialHolonomicPose){drive.resetOdometry(initialHolonomicPose);}
 
   /**
    * get center of rotation based on booleanSuppliers for each corner
@@ -291,6 +239,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     vision = new Vision(drive::getPose, drive.field);
   }
 
+  /** 
+   * align wheels inward to make the robot very hard to move, effectivly locking it in place
+   */
   public void lock(){
     drive.lockPose();
   }
