@@ -101,7 +101,16 @@ public class RobotContainer {
 
   private void configureBindings() {
     //run lock command constantly instead of driver input
-    new Trigger(m_driverController::getXButton).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
+    if(RobotBase.isReal()){
+      new Trigger(m_driverController::getXButton).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
+      new Trigger(m_driverController::getYButton).onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+    } else {
+      new Trigger(this::getRawButton3).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
+      new Trigger(m_driverController::getYButton).onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+    }
+  }
+  private boolean getRawButton3(){
+    return m_driverController.getRawButton(3);
   }
 
   /**

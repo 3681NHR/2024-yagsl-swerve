@@ -325,5 +325,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void lock(){
     drive.lockPose();
   }
+  /**
+   * Resets the gyro angle to zero and resets odometry to the same position, but facing toward 0.
+   */
+  public void zeroGyro()
+  {
+    drive.zeroGyro();
+  }
 
 }
