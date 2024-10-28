@@ -49,12 +49,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     {
       throw new RuntimeException(e);
     }
-    //cosine compensator is very helpfull, but works wierd in simulation
+    //cosine compensator is very helpfull, but works weird in simulation
     drive.setCosineCompensator(!RobotBase.isSimulation());
     drive.setChassisDiscretization(true, 0.02);
     drive.pushOffsetsToEncoders();
+    
 
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.INFO;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     setupPathPlanner();
     if (visionEnabled)

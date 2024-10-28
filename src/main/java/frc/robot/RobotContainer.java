@@ -42,10 +42,10 @@ public class RobotContainer {
     // sim command used raw axis for simulating joysticks
     // bumpers and triggers control center of rotation, usefull for evasive meneuvers
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveCommand(
-      () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRightX(), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRightY(), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getLeftY(), -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getLeftX(), -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRightX(), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRightY(), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
@@ -53,10 +53,10 @@ public class RobotContainer {
       () -> !m_driverController.getRawButton(swapAngleButtonID)
     );
     Command driveFieldOrientedDirectAngleSim = swerveDriveSubsystem.driveCommand(
-      () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(1), -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(0), -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(4), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(5), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
@@ -69,10 +69,10 @@ public class RobotContainer {
     // sim command used raw axis for simulating joysticks
     // bumpers and triggers control center of rotation, usefull for evasive meneuvers
     Command driveFieldOrientedAngulerVelocity = swerveDriveSubsystem.driveCommand(
-      () -> processInput(m_driverController.getLeftY(), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getLeftX(), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRightX(), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRightY(), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getLeftY() , -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getLeftX() , -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRightX(), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRightY(), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
@@ -80,10 +80,10 @@ public class RobotContainer {
       () -> m_driverController.getRawButton(swapAngleButtonID)
     );
     Command driveFieldOrientedAnglularVelocitySim = swerveDriveSubsystem.driveCommand(
-      () -> processInput(m_driverController.getRawAxis(1), -1.0, null, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(0), -1.0, null, OperatorConstants.LEFT_X_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(4), -1.0, null, OperatorConstants.RIGHT_Y_DEADBAND),
-      () -> processInput(m_driverController.getRawAxis(5), -1.0, null, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(1), -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(0), -Constants.OperatorConstants.TRANSLATION_CURVE, null, OperatorConstants.LEFT_X_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(4), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_Y_DEADBAND),
+      () -> processInput(m_driverController.getRawAxis(5), -Constants.OperatorConstants.ROTATION_CURVE, null, OperatorConstants.RIGHT_X_DEADBAND),
       () -> m_driverController.getLeftTriggerAxis()>0.5,
       () -> m_driverController.getRightTriggerAxis()>0.5,
       () -> m_driverController.getLeftBumper(),
@@ -136,7 +136,7 @@ public class RobotContainer {
   /**
    * process input value
    * 
-   * curve function graphed here {@link https://www.desmos.com/calculator/aipfc6wivm}
+   * curve function graphed here {@link https://www.desmos.com/calculator/fjuc4iqjqt}
    * @param val - number to process
    * @param multiplier - multiplier for input, mainly used for inverting
    * @param square - polynomial curve value, roughly y=x^s {@link https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#squaring-inputs}
@@ -149,8 +149,8 @@ public class RobotContainer {
 
     if(multiplier != null){out *= multiplier;                           }
     if(square     != null){
-      if(deadZone   != null){
-        out  = Math.signum(val) * Math.pow(Math.abs((1+deadZone)*val)-deadZone, square);
+      if(deadZone != null && deadZone > 0){
+        out  = Math.signum(val) * Math.pow((1/(-deadZone+1))*Math.abs(val)-(deadZone/(-deadZone+1)), square);
       } else {
         out  = Math.signum(val) * Math.pow(Math.abs(val), square);
       }

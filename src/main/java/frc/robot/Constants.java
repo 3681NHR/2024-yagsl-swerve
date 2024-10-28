@@ -20,12 +20,12 @@ public final class Constants {
   public static class OperatorConstants
   {
     // Joystick Deadbands
-    public static final double LEFT_X_DEADBAND  = 0.1;
-    public static final double LEFT_Y_DEADBAND  = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double RIGHT_Y_DEADBAND = 0.1;
+    public static final double LEFT_X_DEADBAND  = 0.01;
+    public static final double LEFT_Y_DEADBAND  = 0.01;
+    public static final double RIGHT_X_DEADBAND = 0.01;
+    public static final double RIGHT_Y_DEADBAND = 0.01;
     
-    //Curvature(rotation curve only applies when using anguler velocity)
+    //Curvature (rotation curve only applies when using anguler velocity)
     public static final double TRANSLATION_CURVE = 2;
     public static final double ROTATION_CURVE = 2;
 
