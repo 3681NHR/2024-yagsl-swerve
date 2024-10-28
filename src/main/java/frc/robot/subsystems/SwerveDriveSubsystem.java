@@ -53,7 +53,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.setCosineCompensator(!RobotBase.isSimulation());
     drive.setChassisDiscretization(true, 0.02);
     drive.pushOffsetsToEncoders();
-    
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
