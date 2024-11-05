@@ -33,7 +33,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private       Vision  vision;
   //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  private final boolean visionEnabled = true;
+  private final boolean visionEnabled = false;
 
   /**
    * YAGSL swerve subsystem constructor
@@ -50,7 +50,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
     //cosine compensator is very helpfull, but works weird in simulation
     drive.setCosineCompensator(!RobotBase.isSimulation());
-    drive.setChassisDiscretization(true, 0.02);
+    //drive.setChassisDiscretization(true, 0.02);
     drive.pushOffsetsToEncoders();
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;

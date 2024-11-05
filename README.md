@@ -26,6 +26,8 @@ module 4 drive motor was marked "dud", might be weak
  - to connect dashboards to simulator
     - advantagescope has a button for this
     - others need to set the ip to "localhost"
+ - angle setpoins are being changed by 180 degrees everytime the wheel starts to turn. prob something with optimisation
+
 
 ## todo
 - auto aim buttons
