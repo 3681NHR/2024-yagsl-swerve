@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveDrive;
+import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -51,7 +52,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     //cosine compensator is very helpfull, but works weird in simulation
     drive.setCosineCompensator(!RobotBase.isSimulation());
     //drive.setChassisDiscretization(true, 0.02);
-    drive.pushOffsetsToEncoders();
+    drive.restoreInternalOffset();
+    drive.setMotorIdleMode(true);
+    for(SwerveModule m : drive.getModules()){
+      m.getAngleMotor().configurePIDWrapping(0, 359);
+    }
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 

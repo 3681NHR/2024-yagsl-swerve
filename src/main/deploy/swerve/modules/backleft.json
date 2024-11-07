@@ -15,13 +15,13 @@
     "canbus": null
   },
   "encoder": {
-    "type": "canandmag",
-    "id": 33,
+    "type": "attached",
+    "id": 23,
     "canbus": null
   },
   "inverted": {
     "drive": true,
     "angle": true
   },
-  "absoluteEncoderInverted": true
+  "absoluteEncoderInverted": false
 }
