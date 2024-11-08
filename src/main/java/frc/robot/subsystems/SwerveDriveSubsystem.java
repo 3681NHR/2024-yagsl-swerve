@@ -12,8 +12,10 @@ import com.pathplanner.lib.util.ReplanningConfig;
 //import edu.wpi.first.apriltag.AprilTagFieldLayout;
 //import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +40,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   /**
    * YAGSL swerve subsystem constructor
-   * @param directory - directory of YAGSL config json
+   * @param directory - directory of YAGSL config jsonc
    */
   public SwerveDriveSubsystem(File directory) {
     
@@ -51,11 +53,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
     //cosine compensator is very helpfull, but works weird in simulation
     drive.setCosineCompensator(!RobotBase.isSimulation());
-    //drive.setChassisDiscretization(true, 0.02);
+    drive.setChassisDiscretization(true, 0.02);
+    drive.setHeadingCorrection(false);
     drive.restoreInternalOffset();
     drive.setMotorIdleMode(true);
     for(SwerveModule m : drive.getModules()){
-      m.getAngleMotor().configurePIDWrapping(0, 359);
+      m.getAngleMotor().configurePIDWrapping(-180, 180);
     }
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -73,6 +76,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    drive.setModuleStates(new SwerveModuleState[]{
+      new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
+       new SwerveModuleState(0, Rotation2d.fromDegrees(0)), 
+       new SwerveModuleState(0, Rotation2d.fromDegrees(0)), 
+       new SwerveModuleState(0, Rotation2d.fromDegrees(0))
+    }, false);
     // When vision is enabled we must manually update odometry in SwerveDrive since we canceled the odometry thread
     if (visionEnabled)
     {
