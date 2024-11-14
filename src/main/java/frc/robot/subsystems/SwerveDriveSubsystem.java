@@ -58,7 +58,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.restoreInternalOffset();
     drive.setMotorIdleMode(true);
     for(SwerveModule m : drive.getModules()){
-      m.getAngleMotor().configurePIDWrapping(-180, 180);
+      //m.getAngleMotor().configurePIDWrapping(-180, 180);
     }
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -76,12 +76,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    drive.setModuleStates(new SwerveModuleState[]{
-      new SwerveModuleState(0, Rotation2d.fromDegrees(0)),
-       new SwerveModuleState(0, Rotation2d.fromDegrees(0)), 
-       new SwerveModuleState(0, Rotation2d.fromDegrees(0)), 
-       new SwerveModuleState(0, Rotation2d.fromDegrees(0))
-    }, false);
     // When vision is enabled we must manually update odometry in SwerveDrive since we canceled the odometry thread
     if (visionEnabled)
     {

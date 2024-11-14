@@ -106,6 +106,9 @@ public class RobotContainer {
     // add auto chooser to networktables
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    SmartDashboard.putNumber("null", m_driverController.getLeftY());
+    SmartDashboard.putNumber("NaN", m_driverController.getLeftX());
   }
 
   private void configureBindings() {
