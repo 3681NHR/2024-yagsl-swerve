@@ -3,26 +3,18 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
-//import edu.wpi.first.apriltag.AprilTagFieldLayout;
-//import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveDrive;
-import swervelib.SwerveModule;
-import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -34,14 +26,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
 
-  private       Vision  vision;
-  //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  private final boolean visionEnabled = false;
-
-  /**
-   * YAGSL swerve subsystem constructor
-   * @param directory - directory of YAGSL config jsonc
-   */
   public SwerveDriveSubsystem(File directory) {
     
     try
@@ -55,33 +39,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.setCosineCompensator(!RobotBase.isSimulation());
     drive.setChassisDiscretization(true, 0.02);
     drive.setHeadingCorrection(false);
-    drive.restoreInternalOffset();
-    drive.setMotorIdleMode(true);
-    for(SwerveModule m : drive.getModules()){
-      //m.getAngleMotor().configurePIDWrapping(-180, 180);
-    }
+    drive.setMotorIdleMode(false);
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     setupPathPlanner();
-    if (visionEnabled)
-    {
-      setupPhotonVision();
-      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
-      drive.stopOdometryThread();
-    }
   }
 
   
 
   @Override
   public void periodic() {
-    // When vision is enabled we must manually update odometry in SwerveDrive since we canceled the odometry thread
-    if (visionEnabled)
-    {
-      drive.updateOdometry();
-      vision.updatePoseEstimation(drive);
-    }
+    
   }
 
   @Override
@@ -94,48 +63,26 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * <p> if angle is true, uses heading as setppoint for angle pid
    * <p> if angle is false, used headingX for anguler velocity
    *
-   * @param translationX Translation in the X direction. Cubed for smoother controls.
-   * @param translationY Translation in the Y direction. Cubed for smoother controls.
+   * @param translationX Translation in the X direction
+   * @param translationY Translation in the Y direction
    * @param headingX     Heading X to calculate angle of the joystick. anguler velocity when angle is true
    * @param headingY     Heading Y to calculate angle of the joystick. unused when angle is true
-   * @param fl - boolSupplier for rotation point buttons
-   * @param fr - boolSupplier for rotation point buttons
-   * @param bl - boolSupplier for rotation point buttons
-   * @param br - boolSupplier for rotation point buttons
-   * @param angle weather to use direct angle control or anguler velocity control
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY, BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br, BooleanSupplier angle)
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotate)
   {
 
-    if(angle.getAsBoolean()){
-    drive.setHeadingCorrection(!RobotBase.isSimulation());// normaly true, but needs to be false for simultaion
-    return run(() -> {
-
-      Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
-        translationY.getAsDouble()), 0.8);
-
-      // Make the robot move
-      drive.driveFieldOriented(drive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
-        headingX.getAsDouble(),
-        headingY.getAsDouble(),
-        drive.getOdometryHeading().getRadians(),
-        drive.getMaximumVelocity()),
-        getPivot(fl, fr, bl, br));
-    });
-    } else {
     drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
     return run(() -> {
       // Make the robot move
-      drive.drive(SwerveMath.scaleTranslation(new Translation2d(
+      drive.drive(new Translation2d(
                             translationX.getAsDouble() * drive.getMaximumVelocity(),
-                            translationY.getAsDouble() * drive.getMaximumVelocity()), 0.8),
-                        Math.pow(headingX.getAsDouble(), 3) * drive.getMaximumAngularVelocity(),
-                        true,
+                            translationY.getAsDouble() * drive.getMaximumVelocity()),
+                        rotate.getAsDouble() * drive.getMaximumAngularVelocity(),
                         false,
-                        getPivot(fl, fr, bl, br));
+                        false);
     });
-    }
+    
   }
 
   /**
@@ -178,60 +125,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param initialHolonomicPose
    */
   public void resetOdometry(Pose2d initialHolonomicPose){drive.resetOdometry(initialHolonomicPose);}
-
-  /**
-   * get center of rotation based on booleanSuppliers for each corner
-   * if fl is true, rotation center would be t2d for fl module
-   * if multiple boolsupliers are true, output will be average of corrisponding positions
-   * @param fl - booleanSupplier for front left  corner
-   * @param fr - booleanSupplier for front right corner
-   * @param bl - booleanSupplier for back  left  corner
-   * @param br - booleanSupplier for back  right corner
-   * @return translation2d for rotation center
-   */
-  public Translation2d getPivot(BooleanSupplier fl, BooleanSupplier fr, BooleanSupplier bl, BooleanSupplier br){
-
-    ArrayList<Translation2d> positions = new ArrayList<>();
-
-    //add module position to list if corisponding button is pressed
-    if (fl.getAsBoolean()) positions.add(drive.getModules()[0].getConfiguration().moduleLocation);
-    if (fr.getAsBoolean()) positions.add(drive.getModules()[1].getConfiguration().moduleLocation);
-    if (bl.getAsBoolean()) positions.add(drive.getModules()[2].getConfiguration().moduleLocation);
-    if (br.getAsBoolean()) positions.add(drive.getModules()[3].getConfiguration().moduleLocation);
-    //average positions
-    return meanAllT2d(positions);
-  }
-
-  /** take the mean of all T2ds in arrayList t */
-  private Translation2d meanAllT2d(ArrayList<Translation2d> t){
-    if(t.size() > 0){
-    double[] x = new double[t.size()];
-    double[] y = new double[t.size()];
-
-    for (int i = 0; i < t.size(); i++) {x[i] = t.get(i).getX();}
-    for (int i = 0; i < t.size(); i++) {y[i] = t.get(i).getY();}
-
-    double meanX = 0;
-    for(double a : x){meanX += a;}
-    meanX /= x.length;
-
-    double meanY = 0;
-    for(double a : y){meanY += a;}
-    meanY /= y.length;
-
-    return new Translation2d(meanX, meanY);
-    } else {
-      return new Translation2d();
-    }
-  }
-
-  /**
-   * Setup the photon vision class.
-   */
-  public void setupPhotonVision()
-  {
-    vision = new Vision(drive::getPose, drive.field);
-  }
 
   /** 
    * align wheels inward to make the robot very hard to move, effectivly locking it in place

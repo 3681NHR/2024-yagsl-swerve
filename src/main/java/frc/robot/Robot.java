@@ -31,7 +31,6 @@ public class Robot extends TimedRobot {
     if(!RobotBase.isSimulation()){
       DataLogManager.start();
     }
-
   }
 
   /**
