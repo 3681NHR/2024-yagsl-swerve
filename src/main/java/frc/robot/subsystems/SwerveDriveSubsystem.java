@@ -40,6 +40,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.setChassisDiscretization(true, 0.02);
     drive.setHeadingCorrection(false);
     drive.setMotorIdleMode(false);
+    drive.pushOffsetsToEncoders();
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 

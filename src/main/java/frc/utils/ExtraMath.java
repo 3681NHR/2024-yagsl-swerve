@@ -18,7 +18,6 @@ public final class ExtraMath {
   public static double processInput(Double val, Double multiplier, Double square, Double deadZone){
     double out = val;
 
-    if(multiplier != null){out *= multiplier;                           }
     if(square     != null){
       if(deadZone != null && deadZone > 0){
         out  = Math.signum(val) * Math.pow((1/(-deadZone+1))*Math.abs(val)-(deadZone/(-deadZone+1)), square);
@@ -27,6 +26,7 @@ public final class ExtraMath {
       }
     }
     if(deadZone   != null){out  = MathUtil.applyDeadband(out, deadZone);}
+    if(multiplier != null){out *= multiplier;}
 
     return out;
   }

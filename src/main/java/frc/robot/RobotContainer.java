@@ -37,7 +37,7 @@ public class RobotContainer {
     Command driveRobotOrientedAngulerVelocity = swerveDriveSubsystem.driveCommand(
       () -> ExtraMath.processInput(m_driverController.getLeftY() , -1.0, Constants.OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_Y_DEADBAND),
       () -> ExtraMath.processInput(m_driverController.getLeftX() , -1.0, Constants.OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
-      () -> ExtraMath.processInput(m_driverController.getRightY(), -1.0, Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND)
+      () -> ExtraMath.processInput(m_driverController.getRightX(), -1.0, Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND)
     );
 
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngulerVelocity);
