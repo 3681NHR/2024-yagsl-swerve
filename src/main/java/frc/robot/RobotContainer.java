@@ -8,6 +8,7 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -29,18 +30,21 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
+    SmartDashboard.putData("PDP", new PowerDistribution());
+
     
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     // sim command used raw axis for simulating joysticks
     // bumpers and triggers control center of rotation, usefull for evasive meneuvers
-    Command driveRobotOrientedAngulerVelocity = swerveDriveSubsystem.driveCommand(
+    Command driveAngulerVelocity = swerveDriveSubsystem.driveCommand(
       () -> ExtraMath.processInput(m_driverController.getLeftY() , -1.0, Constants.OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_Y_DEADBAND),
       () -> ExtraMath.processInput(m_driverController.getLeftX() , -1.0, Constants.OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
-      () -> ExtraMath.processInput(m_driverController.getRightX(), -1.0, Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND)
+      () -> ExtraMath.processInput(m_driverController.getRightX(), -1.0, Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
+      () -> m_driverController.getYButton()
     );
 
-    swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngulerVelocity);
+    swerveDriveSubsystem.setDefaultCommand(driveAngulerVelocity);
     
 
     autoChooser = AutoBuilder.buildAutoChooser();

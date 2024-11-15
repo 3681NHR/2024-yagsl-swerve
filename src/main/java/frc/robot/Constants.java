@@ -20,17 +20,14 @@ public final class Constants {
   public static class OperatorConstants
   {
     // Joystick Deadbands
-    public static final double LEFT_X_DEADBAND  = 0.025;
-    public static final double LEFT_Y_DEADBAND  = 0.025;
-    public static final double RIGHT_X_DEADBAND = 0.025;
-    public static final double RIGHT_Y_DEADBAND = 0.025;
+    public static final double LEFT_X_DEADBAND  = 0.0;
+    public static final double LEFT_Y_DEADBAND  = 0.0;
+    public static final double RIGHT_X_DEADBAND = 0.0;
+    public static final double RIGHT_Y_DEADBAND = 0.0;
     
     //Curvature (rotation curve only applies when using anguler velocity)
-    public static final double TRANSLATION_CURVE = 2;
-    public static final double ROTATION_CURVE = 2;
-
-    //is using anguler velocity controls instead of direct angle
-    public static final Boolean ANGULER_VELOCITY = true;
+    public static final double TRANSLATION_CURVE = 3;
+    public static final double ROTATION_CURVE = 3;
     
     //usb port of driver controller, remember to assign controller to port in driverstation
     public static final int DRIVER_CONTROLLER_PORT = 0;

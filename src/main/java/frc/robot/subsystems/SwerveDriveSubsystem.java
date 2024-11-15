@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -40,7 +41,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     drive.setChassisDiscretization(true, 0.02);
     drive.setHeadingCorrection(false);
     drive.setMotorIdleMode(false);
-    drive.pushOffsetsToEncoders();
+    //drive.pushOffsetsToEncoders();
+
+    //correct skew caused when rotating and translating at the same time
+    //drive.setAngularVelocityCompensation(true, true, 0.1);
 
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
@@ -70,7 +74,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param headingY     Heading Y to calculate angle of the joystick. unused when angle is true
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotate)
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotate, BooleanSupplier fieldOriented)
   {
 
     drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
@@ -80,7 +84,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                             translationX.getAsDouble() * drive.getMaximumVelocity(),
                             translationY.getAsDouble() * drive.getMaximumVelocity()),
                         rotate.getAsDouble() * drive.getMaximumAngularVelocity(),
-                        false,
+                        fieldOriented.getAsBoolean(),
                         false);
     });
     
