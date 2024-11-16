@@ -27,6 +27,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
 
+
   public SwerveDriveSubsystem(File directory) {
     
     try
@@ -60,7 +61,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    
+    drive.setCosineCompensator(false);
+    drive.setHeadingCorrection(false);
   }
 
   /**
@@ -74,19 +76,43 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param headingY     Heading Y to calculate angle of the joystick. unused when angle is true
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotate, BooleanSupplier fieldOriented)
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotateX, DoubleSupplier rotateY, BooleanSupplier directAngle, BooleanSupplier fieldOriented)
   {
-
-    drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
-    return run(() -> {
-      // Make the robot move
-      drive.drive(new Translation2d(
-                            translationX.getAsDouble() * drive.getMaximumVelocity(),
-                            translationY.getAsDouble() * drive.getMaximumVelocity()),
-                        rotate.getAsDouble() * drive.getMaximumAngularVelocity(),
-                        fieldOriented.getAsBoolean(),
-                        false);
-    });
+    if(directAngle.getAsBoolean()){
+      drive.setHeadingCorrection(true);
+      return run(() -> {
+        if(fieldOriented.getAsBoolean()){
+          drive.driveFieldOriented(drive.swerveController.getTargetSpeeds(
+            translationX.getAsDouble(), 
+            translationY.getAsDouble(), 
+            rotateX.getAsDouble(), 
+            rotateY.getAsDouble(), 
+            drive.getOdometryHeading().getRadians(),
+            drive.getMaximumVelocity())
+          );
+        } else {
+          drive.drive(drive.swerveController.getTargetSpeeds(
+            translationX.getAsDouble(), 
+            translationY.getAsDouble(), 
+            rotateX.getAsDouble(), 
+            rotateY.getAsDouble(), 
+            drive.getOdometryHeading().getRadians(),
+            drive.getMaximumVelocity())
+          );
+        }
+      });
+    } else {
+      drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
+      return run(() -> {
+        // Make the robot move
+        drive.drive(new Translation2d(
+                              translationX.getAsDouble() * drive.getMaximumVelocity(),
+                              translationY.getAsDouble() * drive.getMaximumVelocity()),
+                          rotateX.getAsDouble() * drive.getMaximumAngularVelocity(),
+                          fieldOriented.getAsBoolean(),
+                          false);
+      });
+    }
     
   }
 

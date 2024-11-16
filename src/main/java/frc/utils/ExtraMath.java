@@ -30,4 +30,8 @@ public final class ExtraMath {
 
     return out;
   }
+
+  public static double remap(double val, double inMin, double inMax, double outMin, double outMax){
+    return ((val-inMin)/(inMax-inMin)*(outMax-outMin))+outMin;
+  }
 }
