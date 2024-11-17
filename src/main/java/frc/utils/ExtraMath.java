@@ -34,4 +34,8 @@ public final class ExtraMath {
   public static double remap(double val, double inMin, double inMax, double outMin, double outMax){
     return ((val-inMin)/(inMax-inMin)*(outMax-outMin))+outMin;
   }
+
+  public static double holdPositive(double in){
+    return in<0 ? 0 : in;
+  }
 }

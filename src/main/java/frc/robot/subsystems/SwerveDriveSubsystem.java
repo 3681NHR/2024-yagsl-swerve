@@ -13,9 +13,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveDrive;
+import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -47,7 +49,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     //correct skew caused when rotating and translating at the same time
     //drive.setAngularVelocityCompensation(true, true, 0.1);
 
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.MACHINE;
 
     setupPathPlanner();
   }
@@ -78,41 +80,32 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotateX, DoubleSupplier rotateY, BooleanSupplier directAngle, BooleanSupplier fieldOriented)
   {
+    return run(() -> {
+
     if(directAngle.getAsBoolean()){
-      drive.setHeadingCorrection(true);
-      return run(() -> {
-        if(fieldOriented.getAsBoolean()){
-          drive.driveFieldOriented(drive.swerveController.getTargetSpeeds(
-            translationX.getAsDouble(), 
-            translationY.getAsDouble(), 
-            rotateX.getAsDouble(), 
-            rotateY.getAsDouble(), 
-            drive.getOdometryHeading().getRadians(),
-            drive.getMaximumVelocity())
-          );
-        } else {
-          drive.drive(drive.swerveController.getTargetSpeeds(
-            translationX.getAsDouble(), 
-            translationY.getAsDouble(), 
-            rotateX.getAsDouble(), 
-            rotateY.getAsDouble(), 
-            drive.getOdometryHeading().getRadians(),
-            drive.getMaximumVelocity())
-          );
-        }
-      });
+      drive.setHeadingCorrection(RobotBase.isReal()); // Normally you would want heading correction for this kind of control.
+    
+      drive.driveFieldOriented(drive.swerveController.getTargetSpeeds(
+        translationX.getAsDouble(), 
+        translationY.getAsDouble(),
+        rotateX.getAsDouble(),
+        rotateY.getAsDouble(),
+        drive.getOdometryHeading().getRadians(),
+        drive.getMaximumVelocity())
+      );
     } else {
       drive.setHeadingCorrection(false);// normaly false and needs to be false for simultaion
-      return run(() -> {
+      
         // Make the robot move
         drive.drive(new Translation2d(
-                              translationX.getAsDouble() * drive.getMaximumVelocity(),
-                              translationY.getAsDouble() * drive.getMaximumVelocity()),
-                          rotateX.getAsDouble() * drive.getMaximumAngularVelocity(),
-                          fieldOriented.getAsBoolean(),
-                          false);
-      });
+          translationX.getAsDouble() * drive.getMaximumVelocity(),
+          translationY.getAsDouble() * drive.getMaximumVelocity()),
+          rotateX.getAsDouble() * drive.getMaximumAngularVelocity(),
+          fieldOriented.getAsBoolean(),
+          false
+        );
     }
+  });
     
   }
 

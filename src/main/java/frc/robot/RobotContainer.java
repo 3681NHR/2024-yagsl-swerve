@@ -32,10 +32,12 @@ public class RobotContainer {
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
 
+  private PowerDistribution pdp = new PowerDistribution();
+
   public RobotContainer() {
     configureBindings();
 
-    SmartDashboard.putData("PDP", new PowerDistribution());
+    SmartDashboard.putData("PDP", pdp);
 
     
     // left stick controls translation
@@ -47,8 +49,8 @@ public class RobotContainer {
       () -> ExtraMath.processInput(m_driverController.getLeftX() , -ExtraMath.remap(m_driverController.getLeftTriggerAxis() , 0.0, 1.0, 1.0, 0.1), Constants.OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
       () -> ExtraMath.processInput(m_driverController.getRightX(), -ExtraMath.remap(m_driverController.getRightTriggerAxis(), 0.0, 1.0, 1.0, 0.1), Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
       () -> ExtraMath.processInput(m_driverController.getRightY(), -ExtraMath.remap(m_driverController.getRightTriggerAxis(), 0.0, 1.0, 1.0, 0.1), Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
-      () -> this.fod,
-      () -> this.directAngle
+      () -> this.getDirectAngle(),
+      () -> this.getFOD()
     );
     // left stick controls translation
     // right stick controls the angular velocity of the robot
@@ -59,8 +61,8 @@ public class RobotContainer {
       () -> ExtraMath.processInput(m_driverController.getRawAxis(0), -ExtraMath.remap(m_driverController.getRawAxis(2), 0.0, 1.0, 1.0, 0.1), Constants.OperatorConstants.TRANSLATION_CURVE, OperatorConstants.LEFT_X_DEADBAND),
       () -> ExtraMath.processInput(m_driverController.getRawAxis(4), -ExtraMath.remap(m_driverController.getRawAxis(3), 0.0, 1.0, 1.0, 0.1), Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
       () -> ExtraMath.processInput(m_driverController.getRawAxis(5), -ExtraMath.remap(m_driverController.getRawAxis(3), 0.0, 1.0, 1.0, 0.1), Constants.OperatorConstants.ROTATION_CURVE, OperatorConstants.RIGHT_X_DEADBAND),
-      () -> this.fod,
-      () -> this.directAngle
+      () -> this.getDirectAngle(),
+      () -> this.getFOD()
     );
 
     swerveDriveSubsystem.setDefaultCommand(RobotBase.isReal() ? driveAngulerVelocity : driveAngulerVelocitySim);
@@ -76,15 +78,17 @@ public class RobotContainer {
       new Trigger(m_driverController::getXButton).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
       new Trigger(m_driverController::getAButton).onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
       new Trigger(m_driverController::getLeftStickButton).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
+      new Trigger(m_driverController::getRightStickButton).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
     } else {
       new Trigger(() -> m_driverController.getRawButton(3)).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
       new Trigger(() -> m_driverController.getRawButton(1)).onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
       new Trigger(() -> m_driverController.getRawButton(9)).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
+      new Trigger(() -> m_driverController.getRawButton(10)).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
     }
   }
 
   public void Periodic(){
-    SmartDashboard.putBoolean("fod", fod);
+    SmartDashboard.putBoolean("fod", getFOD());
     SmartDashboard.putBoolean("direct angle", directAngle);
   }
   public void SimPeriodic(){
@@ -94,5 +98,9 @@ public class RobotContainer {
     Command auto = autoChooser.getSelected();
     return auto;
   }
+
+  
+  public boolean getFOD(){return fod;}
+  public boolean getDirectAngle(){return directAngle;}
 
 }

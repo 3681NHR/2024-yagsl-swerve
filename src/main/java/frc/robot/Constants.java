@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -17,6 +18,10 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final double AUTO_TIME = 15;
+  public static final double TELEOP_TIME = 135;//2:15
+
   public static class OperatorConstants
   {
     // Joystick Deadbands
@@ -29,6 +34,11 @@ public final class Constants {
     public static final double TRANSLATION_CURVE = 2;
     public static final double ROTATION_CURVE = 2;
     
+    public static final Rotation2d DPAD_UP_ANGLE    =  Rotation2d.fromDegrees(0);//rotation setpoint for dpad up button
+    public static final Rotation2d DPAD_DOWN_ANGLE  =  Rotation2d.fromDegrees(180);//rotation setpoint for dpad down button
+    public static final Rotation2d DPAD_LEFT_ANGLE  =  Rotation2d.fromDegrees(90);//rotation setpoint for dpad left button
+    public static final Rotation2d DPAD_RIGHT_ANGLE =  Rotation2d.fromDegrees(270);//rotation setpoint for dpad right button
+
     //usb port of driver controller, remember to assign controller to port in driverstation
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
