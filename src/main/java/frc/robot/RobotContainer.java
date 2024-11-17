@@ -29,6 +29,9 @@ public class RobotContainer {
   private boolean fod = Constants.drive.STARTING_FOD;
   private boolean directAngle = Constants.drive.STARTING_DIRECT_ANGLE;
 
+  private Trigger lockPose;
+  private Trigger rstGyro;
+
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
 
@@ -75,13 +78,25 @@ public class RobotContainer {
   private void configureBindings() {
     //run lock command constantly instead of driver input
     if(RobotBase.isReal()){
-      new Trigger(m_driverController::getXButton).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
-      new Trigger(m_driverController::getAButton).onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+      lockPose = new Trigger(m_driverController::getXButton);
+      rstGyro = new Trigger(m_driverController::getAButton);
+
+      lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
+      rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+      lockPose.or(rstGyro).onTrue(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0.5);}));
+      lockPose.or(rstGyro).onFalse(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0);}));
+      
       new Trigger(m_driverController::getLeftStickButton).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
       new Trigger(m_driverController::getRightStickButton).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
     } else {
-      new Trigger(() -> m_driverController.getRawButton(3)).whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
-      new Trigger(() -> m_driverController.getRawButton(1)).onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+      lockPose = new Trigger(() -> m_driverController.getRawButton(3));
+      rstGyro = new Trigger(() -> m_driverController.getRawButton(1));
+
+      lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
+      rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+      lockPose.or(rstGyro).onTrue(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0.5);}));
+      lockPose.or(rstGyro).onFalse(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0);}));
+      
       new Trigger(() -> m_driverController.getRawButton(9)).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
       new Trigger(() -> m_driverController.getRawButton(10)).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
     }
@@ -90,6 +105,7 @@ public class RobotContainer {
   public void Periodic(){
     SmartDashboard.putBoolean("fod", getFOD());
     SmartDashboard.putBoolean("direct angle", directAngle);
+
   }
   public void SimPeriodic(){
   }

@@ -9,7 +9,7 @@
           {
             "title": "List Layout",
             "x": 20.0,
-            "y": 420.0,
+            "y": 440.0,
             "width": 400.0,
             "height": 480.0,
             "type": "List Layout",
@@ -253,7 +253,7 @@
             "x": 20.0,
             "y": 0.0,
             "width": 880.0,
-            "height": 420.0,
+            "height": 440.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -272,7 +272,7 @@
             "x": 900.0,
             "y": 140.0,
             "width": 260.0,
-            "height": 280.0,
+            "height": 300.0,
             "type": "YAGSL Swerve Drive",
             "properties": {
               "topic": "/SmartDashboard/swerve",
@@ -285,7 +285,7 @@
           {
             "title": "fod",
             "x": 840.0,
-            "y": 420.0,
+            "y": 440.0,
             "width": 140.0,
             "height": 140.0,
             "type": "Boolean Box",
@@ -302,7 +302,7 @@
           {
             "title": "direct angle",
             "x": 980.0,
-            "y": 420.0,
+            "y": 440.0,
             "width": 140.0,
             "height": 140.0,
             "type": "Boolean Box",
@@ -331,7 +331,7 @@
           {
             "title": "FMSInfo",
             "x": 420.0,
-            "y": 420.0,
+            "y": 440.0,
             "width": 420.0,
             "height": 140.0,
             "type": "FMSInfo",
