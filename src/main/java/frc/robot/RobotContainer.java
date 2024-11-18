@@ -2,9 +2,17 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.utils.ControllerRumble;
+import frc.utils.RumbleType;
+import frc.utils.TimerHandler;
 import frc.utils.ExtraMath;
+import frc.utils.Rumble;
+import frc.utils.RumbleSequence;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -12,7 +20,6 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RuntimeType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +41,10 @@ public class RobotContainer {
 
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private final XboxController m_operatorController =
+      new XboxController(OperatorConstants.OPERATOR_CONTROLLER_PORT);
+
+  private ControllerRumble rumbler = new ControllerRumble(m_driverController);
 
   private PowerDistribution pdp = new PowerDistribution();
 
@@ -80,32 +91,40 @@ public class RobotContainer {
     if(RobotBase.isReal()){
       lockPose = new Trigger(m_driverController::getXButton);
       rstGyro = new Trigger(m_driverController::getAButton);
-
-      lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
-      rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
-      lockPose.or(rstGyro).onTrue(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0.5);}));
-      lockPose.or(rstGyro).onFalse(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0);}));
-      
       new Trigger(m_driverController::getLeftStickButton).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
       new Trigger(m_driverController::getRightStickButton).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
+      
+      new Trigger(() -> m_operatorController.getAButton()).onTrue(Commands.runOnce(() -> {
+        rumbler.addRumble(0.2, 1, RumbleType.ADD);
+        rumbler.addRumble(0.05, 0, RumbleType.ADD);
+        rumbler.addRumble(0.2, 1, RumbleType.ADD);
+      }));
     } else {
       lockPose = new Trigger(() -> m_driverController.getRawButton(3));
       rstGyro = new Trigger(() -> m_driverController.getRawButton(1));
-
-      lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
-      rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
-      lockPose.or(rstGyro).onTrue(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0.5);}));
-      lockPose.or(rstGyro).onFalse(Commands.runOnce(() -> {m_driverController.setRumble(RumbleType.kBothRumble, 0);}));
-      
       new Trigger(() -> m_driverController.getRawButton(9)).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
       new Trigger(() -> m_driverController.getRawButton(10)).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
+      
+      
     }
+      lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
+      rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+      lockPose.whileTrue(Commands.runOnce(() -> rumbler.addRumble(0.1, 0.1, RumbleType.OVERLAY)).repeatedly());
+      rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(0.2, 1, RumbleType.OVERLAY)));
+      new Trigger(() -> TimerHandler.getTeleopRemaining()<30.0).onTrue(Commands.runOnce(() -> {
+        rumbler.addRumble(new RumbleSequence(new Rumble[]{
+          new Rumble(0.2, 1),
+          new Rumble(0.1, 0),
+          new Rumble(0.2, 1),
+        }), RumbleType.OVERRIDE);
+      }));
   }
 
   public void Periodic(){
     SmartDashboard.putBoolean("fod", getFOD());
     SmartDashboard.putBoolean("direct angle", directAngle);
 
+    rumbler.update();
   }
   public void SimPeriodic(){
   }

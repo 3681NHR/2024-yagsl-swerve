@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7030443775173273,
+      "y": 6.617279291701441
+    },
+    "rotation": -120.73548770192014
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "i side to 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 to center side"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c side to 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 to c side"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

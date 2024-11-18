@@ -16,6 +16,7 @@ this document is meant to save as much info compiled over time by leaders and me
     - loctite the magnets on swerve modules. this is very importent
 
  - complex and abstract systems/lockouts need an override in case of failure(ex. a lockout that prevents launching something until the launcher is up to speed needs a button or toggle in dashboard that allows launching whenever. otherwise if an encoder fails, you *cant* score)
+ - build failing with error "cant find symbol" and filenames, class names, packages, imports, and autocorrect are right. deleting class files under build directory might fix
 ## 2. teachings
 
 ## 3. links

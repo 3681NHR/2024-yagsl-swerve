@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.utils.ExtraMath;
+import frc.utils.TimerHandler;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,9 +18,6 @@ import frc.utils.ExtraMath;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
-  private double autoStart = 0.0;
-  private double teleopStart = 0.0;
 
   private RobotContainer m_robotContainer;
 
@@ -37,17 +35,7 @@ public class Robot extends TimedRobot {
     if(!RobotBase.isSimulation()){
       DataLogManager.start();
     }
-    SmartDashboard.putNumber("time/upTime", 0.0);
-
-    SmartDashboard.putNumber("time/auto/StartTime"    , -1.0);
-    SmartDashboard.putNumber("time/auto/UpTime"       , -1.0);
-    SmartDashboard.putNumber("time/auto/RemainingTime", -1.0);
-    SmartDashboard.putNumber("time/auto/TotalTime"    , Constants.AUTO_TIME);
-    
-    SmartDashboard.putNumber("time/teleop/StartTime"    , -1.0);
-    SmartDashboard.putNumber("time/teleop/UpTime"       , -1.0);
-    SmartDashboard.putNumber("time/teleop/RemainingTime", -1.0);
-    SmartDashboard.putNumber("time/teleop/TotalTime"    , Constants.TELEOP_TIME);
+    TimerHandler.init();
   }
 
   /**
@@ -64,7 +52,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("time/upTime", Timer.getFPGATimestamp());
+    TimerHandler.update();
 
   }
 
@@ -80,20 +68,16 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    autoStart = Timer.getFPGATimestamp();
-    SmartDashboard.putNumber("time/auto/StartTime", autoStart);
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    TimerHandler.initAuto();
   }
-
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    SmartDashboard.putNumber("time/auto/UpTime"       , Timer.getFPGATimestamp()-autoStart);
-    SmartDashboard.putNumber("time/auto/RemainingTime", ExtraMath.holdPositive(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart)));
+    TimerHandler.updateAuto();
   }
 
   @Override
@@ -102,9 +86,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
-    teleopStart = Timer.getFPGATimestamp();
-    SmartDashboard.putNumber("time/teleop/StartTime", teleopStart);
+    TimerHandler.initTeleop();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
@@ -114,9 +96,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("time/teleop/UpTime"       , Timer.getFPGATimestamp()-teleopStart);
-    SmartDashboard.putNumber("time/teleop/RemainingTime", ExtraMath.holdPositive(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart)));
+    
     m_robotContainer.Periodic();
+
+    TimerHandler.updateTeleop();
   }
 
   @Override

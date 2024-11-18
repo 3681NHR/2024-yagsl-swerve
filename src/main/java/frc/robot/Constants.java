@@ -20,7 +20,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final double AUTO_TIME = 15;
-  public static final double TELEOP_TIME = 135;//2:15
+  public static final double TELEOP_TIME = 45;//2:15
 
   public static class OperatorConstants
   {
@@ -41,6 +41,7 @@ public final class Constants {
 
     //usb port of driver controller, remember to assign controller to port in driverstation
     public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
   }
   public static class drive {
     public static final double MAX_SPEED = Units.feetToMeters(15); //max drive speed, m/s
