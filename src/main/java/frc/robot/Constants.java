@@ -31,8 +31,8 @@ public final class Constants {
     public static final double RIGHT_Y_DEADBAND = 0.05;
     
     //Curvature (rotation curve only applies when using anguler velocity)
-    public static final double TRANSLATION_CURVE = 2;
-    public static final double ROTATION_CURVE = 2;
+    public static final double TRANSLATION_CURVE = 3;
+    public static final double ROTATION_CURVE = 3;
     
     public static final Rotation2d DPAD_UP_ANGLE    =  Rotation2d.fromDegrees(0);//rotation setpoint for dpad up button
     public static final Rotation2d DPAD_DOWN_ANGLE  =  Rotation2d.fromDegrees(180);//rotation setpoint for dpad down button

@@ -342,9 +342,9 @@
           },
           {
             "title": "upTime",
-            "x": 1160.0,
-            "y": 0.0,
-            "width": 280.0,
+            "x": 1120.0,
+            "y": 440.0,
+            "width": 140.0,
             "height": 140.0,
             "type": "Match Time",
             "properties": {
@@ -354,6 +354,22 @@
               "time_display_mode": "Minutes and Seconds",
               "red_start_time": 0,
               "yellow_start_time": 0
+            }
+          },
+          {
+            "title": "RemainingTime",
+            "x": 1160.0,
+            "y": 0.0,
+            "width": 280.0,
+            "height": 140.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/time/RemainingTime",
+              "period": 0.02,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 15,
+              "yellow_start_time": 30
             }
           }
         ]
