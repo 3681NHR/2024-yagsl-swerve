@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -88,17 +89,17 @@ public class RobotContainer {
 
   private void configureBindings() {
     //run lock command constantly instead of driver input
+    SmartDashboard.putBoolean("reset odometry", false);
+    new Trigger(() ->SmartDashboard.getBoolean("reset odometry", false)).onTrue(Commands.runOnce(() -> {
+      SmartDashboard.putBoolean("reset odometry", false);
+      swerveDriveSubsystem.resetOdometry(new Pose2d());
+    }));
     if(RobotBase.isReal()){
       lockPose = new Trigger(m_driverController::getXButton);
       rstGyro = new Trigger(m_driverController::getAButton);
       new Trigger(m_driverController::getLeftStickButton).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
       new Trigger(m_driverController::getRightStickButton).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
       
-      new Trigger(() -> m_operatorController.getAButton()).onTrue(Commands.runOnce(() -> {
-        rumbler.addRumble(0.2, 1, RumbleType.ADD);
-        rumbler.addRumble(0.05, 0, RumbleType.ADD);
-        rumbler.addRumble(0.2, 1, RumbleType.ADD);
-      }));
     } else {
       lockPose = new Trigger(() -> m_driverController.getRawButton(3));
       rstGyro = new Trigger(() -> m_driverController.getRawButton(1));

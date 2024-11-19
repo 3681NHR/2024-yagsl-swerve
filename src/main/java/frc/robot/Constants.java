@@ -20,7 +20,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final double AUTO_TIME = 15;
-  public static final double TELEOP_TIME = 235;//2:15
+  public static final double TELEOP_TIME = 135;//2:15
 
   public static class OperatorConstants
   {
