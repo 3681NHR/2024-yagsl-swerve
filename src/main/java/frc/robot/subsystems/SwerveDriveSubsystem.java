@@ -5,10 +5,17 @@ import frc.robot.Constants;
 import java.io.File;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,6 +36,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
 
+  private boolean visionOn;
+  private Vision vision;
+  private PhotonCamera cam;
 
   public SwerveDriveSubsystem(File directory) {
     
@@ -52,13 +62,32 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.MACHINE;
 
     setupPathPlanner();
+    if (visionOn){
+      drive.stopOdometryThread();
+      setupPhotonVision();
+    }
   }
 
-  
+  /**
+   * Setup the photon vision class.
+   */
+  public void setupPhotonVision()
+  {
+    vision = new Vision(drive::getPose, drive.field);
+    cam = new PhotonCamera("front idk");
+  }
 
   @Override
   public void periodic() {
-    
+    if(visionOn){
+      vision.updatePoseEstimation(drive);
+      drive.updateOdometry();
+      PhotonPipelineResult r = cam.getLatestResult();
+      if(r.hasTargets()){
+        Transform3d b = r.getBestTarget().getBestCameraToTarget();
+        drive.addVisionMeasurement(new Pose2d(b.getTranslation().toTranslation2d(), b.getRotation().toRotation2d()), r.getTimestampSeconds());
+      }
+    }
   }
 
   @Override
