@@ -3,8 +3,6 @@ package frc.utils.rumble;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import frc.utils.Rumble;
-import frc.utils.RumbleBase;
 
 public class RumbleSequence implements RumbleBase{
     public List<Rumble> rumbles;
