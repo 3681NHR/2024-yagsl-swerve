@@ -1,36 +1,31 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import swervelib.SwerveDrive;
 
 public class Vision
 {
+  private AprilTagFieldLayout layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  
+  private final double maxError = 10;
+  private final double maxRotError = 90;
+
   private Camera[] cameras = {
     new Camera.builder()
               .withPosition(new Translation3d())
               .withAngle(new Rotation3d())
               .withCamera(new PhotonCamera("front idk"))
+              .withField(layout)
               .build(),
     
   };
-  private final double maxError = 10;
-  private final double maxRotError = 90;
-
-  private AprilTagFieldLayout layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   public Vision(){
     

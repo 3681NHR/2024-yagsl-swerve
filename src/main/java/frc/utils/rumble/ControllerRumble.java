@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID;
-
-import frc.utils.rumble.RumbleBase;
-import frc.utils.rumble.Rumble;
-import frc.utils.rumble.RumbleSequence;
 
 public class ControllerRumble {
     private XboxController controller;

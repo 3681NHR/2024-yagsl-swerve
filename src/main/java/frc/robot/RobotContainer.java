@@ -6,22 +6,14 @@ import frc.utils.rumble.ControllerRumble;
 import frc.utils.rumble.RumbleType;
 import frc.utils.TimerHandler;
 import frc.utils.ExtraMath;
-import frc.utils.rumble.Rumble;
 import frc.utils.rumble.RumblePreset;
 import frc.utils.rumble.RumblePresetLoader;
-import frc.utils.rumble.RumbleSequence;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RuntimeType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,8 +36,6 @@ public class RobotContainer {
 
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  private final XboxController m_operatorController =
-      new XboxController(OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
   private ControllerRumble rumbler = new ControllerRumble(m_driverController);
 
