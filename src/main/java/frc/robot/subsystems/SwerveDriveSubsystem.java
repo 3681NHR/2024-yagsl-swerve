@@ -65,15 +65,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public void setupPhotonVision()
   {
-    vision = new Vision(drive::getPose, drive.field);
+    vision = new Vision();
   }
 
   @Override
   public void periodic() {
     if(visionOn){
-      vision.updatePoseEstimation(drive);
       drive.updateOdometry();
-      //drive.addVisionMeasurement();
+      vision.updatePoseEstimation(drive);
+      
     }
   }
 

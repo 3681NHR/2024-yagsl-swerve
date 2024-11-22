@@ -35,6 +35,10 @@ public final class ExtraMath {
     return ((val-inMin)/(inMax-inMin)*(outMax-outMin))+outMin;
   }
 
+  public static double lerp(double start, double end, double val){
+    return (end-start)*val + start;
+  }
+
   public static double holdPositive(double in){
     return in<0 ? 0 : in;
   }
