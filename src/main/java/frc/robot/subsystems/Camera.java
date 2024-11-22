@@ -1,18 +1,25 @@
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class Camera {
-    public Rotation3d angle;
-    public Translation3d translation;
-    public PhotonCamera camera;
-    public Camera(){}
+    private Rotation3d angle;
+    private Translation3d translation;
+    private PhotonCamera camera;
+    private PhotonPoseEstimator poseEstimator;
+
+    private AprilTagFieldLayout layout;
+    public Camera(AprilTagFieldLayout layout){
+        this.layout = layout;
+    }
 
     public Camera withAngle(Rotation3d rot){
         this.angle = rot;
