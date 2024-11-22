@@ -2,12 +2,14 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.utils.ControllerRumble;
-import frc.utils.RumbleType;
+import frc.utils.rumble.ControllerRumble;
+import frc.utils.rumble.RumbleType;
 import frc.utils.TimerHandler;
 import frc.utils.ExtraMath;
-import frc.utils.Rumble;
-import frc.utils.RumbleSequence;
+import frc.utils.rumble.Rumble;
+import frc.utils.rumble.RumblePreset;
+import frc.utils.rumble.RumblePresetLoader;
+import frc.utils.rumble.RumbleSequence;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -111,13 +113,9 @@ public class RobotContainer {
       lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
       rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
       lockPose.whileTrue(Commands.runOnce(() -> rumbler.addRumble(0.1, 0.1, RumbleType.OVERLAY)).repeatedly());
-      rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(0.2, 1, RumbleType.OVERLAY)));
+      rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(RumblePresetLoader.load(RumblePreset.TAP), RumbleType.OVERLAY)));
       new Trigger(() -> TimerHandler.getTeleopRemaining()<30.0).onTrue(Commands.runOnce(() -> {
-        rumbler.addRumble(new RumbleSequence(new Rumble[]{
-          new Rumble(0.2, 1),
-          new Rumble(0.1, 0),
-          new Rumble(0.2, 1),
-        }), RumbleType.OVERRIDE);
+        rumbler.addRumble(RumblePresetLoader.load(RumblePreset.DOUBLE_TAP), RumbleType.OVERRIDE);
       }));
   }
 

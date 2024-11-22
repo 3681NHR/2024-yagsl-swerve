@@ -1,4 +1,4 @@
-package frc.utils;
+package frc.utils.rumble;
 
 import java.util.ArrayList;
 import java.util.Arrays;

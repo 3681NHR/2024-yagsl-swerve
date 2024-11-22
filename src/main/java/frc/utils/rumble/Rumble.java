@@ -1,6 +1,6 @@
-package frc.utils;
+package frc.utils.rumble;
 
-import frc.utils.RumbleBase;
+import frc.utils.rumble.RumbleBase;
 
 public class Rumble implements RumbleBase{
     private double duration = 0.0;

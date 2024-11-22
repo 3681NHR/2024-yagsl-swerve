@@ -1,4 +1,4 @@
-package frc.utils;
+package frc.utils.rumble;
 
 public enum RumbleType{
     /** 
