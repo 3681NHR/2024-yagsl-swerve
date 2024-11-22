@@ -28,7 +28,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   
   private final SwerveDrive drive;
 
-  private boolean visionOn;
+  private boolean visionOn = false;
   private Vision vision;
 
   public SwerveDriveSubsystem(File directory) {

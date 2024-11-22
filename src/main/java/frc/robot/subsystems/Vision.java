@@ -19,7 +19,7 @@ public class Vision
 
   private Camera[] cameras = {
     new Camera.builder()
-              .withPosition(new Translation3d())
+              .withPosition(new Translation3d(0, 14, 6))
               .withAngle(new Rotation3d())
               .withCamera(new PhotonCamera("front idk"))
               .withField(layout)

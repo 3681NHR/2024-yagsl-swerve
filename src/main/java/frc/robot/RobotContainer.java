@@ -7,8 +7,9 @@ import frc.utils.rumble.RumbleType;
 import frc.utils.TimerHandler;
 import frc.utils.ExtraMath;
 import frc.utils.rumble.RumblePreset;
-import frc.utils.rumble.RumblePresetLoader;
+
 import java.io.File;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -91,7 +92,7 @@ public class RobotContainer {
       rstGyro = new Trigger(m_driverController::getAButton);
       new Trigger(m_driverController::getLeftStickButton).onTrue(Commands.runOnce(() -> {this.fod = !this.fod;}));
       new Trigger(m_driverController::getRightStickButton).onTrue(Commands.runOnce(() -> {this.directAngle = !this.directAngle;}));
-      
+      new Trigger(m_driverController::getYButton).onTrue(Commands.runOnce(() -> rumbler.addRumble(RumblePreset.RING.load(), RumbleType.OVERLAY)));
     } else {
       lockPose = new Trigger(() -> m_driverController.getRawButton(3));
       rstGyro = new Trigger(() -> m_driverController.getRawButton(1));
@@ -103,9 +104,12 @@ public class RobotContainer {
       lockPose.whileTrue(Commands.runOnce(swerveDriveSubsystem::lock, swerveDriveSubsystem).repeatedly());
       rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
       lockPose.whileTrue(Commands.runOnce(() -> rumbler.addRumble(0.1, 0.1, RumbleType.OVERLAY)).repeatedly());
-      rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(RumblePresetLoader.load(RumblePreset.TAP), RumbleType.OVERLAY)));
-      new Trigger(() -> TimerHandler.getTeleopRemaining()<30.0).onTrue(Commands.runOnce(() -> {
-        rumbler.addRumble(RumblePresetLoader.load(RumblePreset.DOUBLE_TAP), RumbleType.OVERRIDE);
+      rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(RumblePreset.TAP.load(), RumbleType.OVERLAY)));
+
+      new Trigger(() -> TimerHandler.getTeleopRemaining()<30.0).or(
+        new Trigger(() -> TimerHandler.getAutoRemaining()<3.0)
+      ).onTrue(Commands.runOnce(() -> {
+        rumbler.addRumble(RumblePreset.DOUBLE_TAP.load(), RumbleType.OVERRIDE);
       }));
   }
 

@@ -21,9 +21,15 @@ handles bindings and input
  - to connect dashboards to simulator
     - advantagescope has a button for this
     - others need to set the ip to "localhost"
- - angle setpoins are being changed by 180 degrees everytime the wheel starts to turn. prob something with optimisation
 
 
 ## todo
-- auto aim buttons
-- fix gyro
+ - auto aim buttons
+ ### at next meet
+ - photon
+ - camera calib
+ - camera mount
+ - pid(f) tuning
+ - test haptics
+ - talk about MEC
+ - 
