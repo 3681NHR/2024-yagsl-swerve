@@ -6,25 +6,18 @@ import java.io.File;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveDrive;
-import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -38,7 +31,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private boolean visionOn;
   private Vision vision;
-  private PhotonCamera cam;
 
   public SwerveDriveSubsystem(File directory) {
     
@@ -74,7 +66,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void setupPhotonVision()
   {
     vision = new Vision(drive::getPose, drive.field);
-    cam = new PhotonCamera("front idk");
   }
 
   @Override
@@ -82,11 +73,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     if(visionOn){
       vision.updatePoseEstimation(drive);
       drive.updateOdometry();
-      PhotonPipelineResult r = cam.getLatestResult();
-      if(r.hasTargets()){
-        Transform3d b = r.getBestTarget().getBestCameraToTarget();
-        drive.addVisionMeasurement(new Pose2d(b.getTranslation().toTranslation2d(), b.getRotation().toRotation2d()), r.getTimestampSeconds());
-      }
+      //drive.addVisionMeasurement();
     }
   }
 
