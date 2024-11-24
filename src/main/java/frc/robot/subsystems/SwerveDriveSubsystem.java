@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveDrive;
@@ -72,7 +73,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     if(visionOn){
       drive.updateOdometry();
       vision.updatePoseEstimation(drive);
-      
     }
   }
 
@@ -163,7 +163,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * reset odometry to given pose2d
    * @param initialHolonomicPose
    */
-  public void resetOdometry(Pose2d initialHolonomicPose){drive.resetOdometry(initialHolonomicPose);}
+  public void resetOdometry(Pose2d initialHolonomicPose){
+    drive.resetOdometry(initialHolonomicPose);
+  }
 
   /** 
    * align wheels inward to make the robot very hard to move, effectivly locking it in place

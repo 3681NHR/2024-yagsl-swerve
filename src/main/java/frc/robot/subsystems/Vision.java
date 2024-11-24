@@ -21,7 +21,7 @@ public class Vision
     new Camera.builder()
               .withPosition(new Translation3d(0, 14, 6))
               .withAngle(new Rotation3d())
-              .withCamera(new PhotonCamera("front idk"))
+              .withCamera(new PhotonCamera("front"))
               .withField(layout)
               .build(),
     
