@@ -56,6 +56,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       drive.stopOdometryThread();
       setupPhotonVision();
     }
+    resetOdometry(Constants.STARTING_POSE);
   }
 
   /**

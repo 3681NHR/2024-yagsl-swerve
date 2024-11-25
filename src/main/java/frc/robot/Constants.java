@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -21,6 +22,8 @@ public final class Constants {
 
   public static final double AUTO_TIME = 15;
   public static final double TELEOP_TIME = 135;//2:15
+
+  public static final Pose2d STARTING_POSE = new Pose2d();
 
   public static class OperatorConstants
   {
