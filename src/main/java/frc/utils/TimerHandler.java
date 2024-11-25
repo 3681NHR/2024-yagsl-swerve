@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
+/**
+ * handles timing and dashboard timers
+ */
 public class TimerHandler {
 
     private static double autoStart = 0.0;
@@ -33,22 +36,30 @@ public class TimerHandler {
 
         SmartDashboard.putNumber("time/auto/StartTime"    , 0);
         SmartDashboard.putNumber("time/auto/UpTime"       , 0);
-        SmartDashboard.putNumber("time/auto/RemainingTime", 0);
+        SmartDashboard.putNumber("time/auto/RemainingTime", Constants.AUTO_TIME);
         SmartDashboard.putNumber("time/auto/TotalTime"    , Constants.AUTO_TIME);
         
         SmartDashboard.putNumber("time/teleop/StartTime"    , 0);
         SmartDashboard.putNumber("time/teleop/UpTime"       , 0);
-        SmartDashboard.putNumber("time/teleop/RemainingTime", 0);
+        SmartDashboard.putNumber("time/teleop/RemainingTime", Constants.TELEOP_TIME);
         SmartDashboard.putNumber("time/teleop/TotalTime"    , Constants.TELEOP_TIME);
     }
     public static void update(){
         SmartDashboard.putNumber("time/upTime", Timer.getFPGATimestamp());
     } 
     public static double getTeleopRemaining(){
-        return ExtraMath.holdPositive(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart));
+        if(teleopStart > 0){
+            return ExtraMath.holdPositive(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart));
+        } else {
+            return Constants.TELEOP_TIME;
+        }
     }
     public static double getAutoRemaining(){
-        return ExtraMath.holdPositive(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart));
+        if(autoStart > 0){
+            return ExtraMath.holdPositive(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart));
+        } else {
+            return Constants.AUTO_TIME;
+        }
     }
     
 }

@@ -11,7 +11,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+/**
+ * photon camera wrapper that includes pose estimation and robot to camera transform in one class
+ */
 public class Camera {
     private Rotation3d angle;
     private Translation3d translation;
@@ -60,13 +62,19 @@ public class Camera {
             return new Camera(this);
         }
     }
-    
+    /**
+     * @return transform3d from robot center to camera
+     */
     public Transform3d getRobotToCam(){
         return new Transform3d(translation, angle);
     }
     public PhotonCamera getCamera(){
         return camera;
     }
+    /**
+     * update pose estimation and adds connected status to smart dashboard
+     * @return estimated pose from estimator
+     */
     public EstimatedRobotPose update(){
         var out = poseEstimator.update();
         SmartDashboard.putBoolean(camera.getName()+" connected", camera.isConnected());

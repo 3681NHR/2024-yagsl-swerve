@@ -25,6 +25,9 @@ handles bindings and input
 
 ## todo
  - auto aim buttons
+ - prox commands
+ - rot snap buttons
+ 
  ### at next meet
  - photon
  - camera calib
@@ -32,4 +35,5 @@ handles bindings and input
  - pid(f) tuning
  - test haptics
  - talk about MEC
+ - talk about website on github/using code-only website
  - 

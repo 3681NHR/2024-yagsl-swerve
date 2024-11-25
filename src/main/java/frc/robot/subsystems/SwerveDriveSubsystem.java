@@ -35,18 +35,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public SwerveDriveSubsystem(File directory) {
     
     try
-    {
+    {//init drive
       drive = new SwerveParser(directory).createSwerveDrive(Constants.drive.MAX_SPEED);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
     }
-    //cosine compensator is very helpfull, but works weird in simulation
-    drive.setCosineCompensator(!RobotBase.isSimulation());
+
     drive.setChassisDiscretization(true, 0.02);
-    drive.setHeadingCorrection(false);
     drive.setMotorIdleMode(false);
-    //drive.pushOffsetsToEncoders();
 
     //correct skew caused when rotating and translating at the same time
     //drive.setAngularVelocityCompensation(true, true, 0.1);
@@ -55,6 +52,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     setupPathPlanner();
     if (visionOn){
+      //stop odometry so updates cam be synced with vision updates
       drive.stopOdometryThread();
       setupPhotonVision();
     }
@@ -71,6 +69,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if(visionOn){
+      //update drive and vision manualy
       drive.updateOdometry();
       vision.updatePoseEstimation(drive);
     }
@@ -78,6 +77,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
+    //these dont work in sim
     drive.setCosineCompensator(false);
     drive.setHeadingCorrection(false);
   }

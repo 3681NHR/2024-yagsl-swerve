@@ -30,6 +30,10 @@ public class Vision
   public Vision(){
     
   }
+  /**
+   * get all estimated robot poses from cameras
+   * @return poses
+   */
   public EstimatedRobotPose[] getEstimatedRobotPoses(){
     ArrayList<EstimatedRobotPose> poses = new ArrayList<>();
     for(Camera c : cameras){
@@ -37,6 +41,10 @@ public class Vision
     }
     return (EstimatedRobotPose[]) poses.toArray();
   }
+  /**
+   * update pose estimation for all cameras and adds result to YAGSL swerve drive estimation
+   * @param drive YAGSL swerve drive
+   */
   public void updatePoseEstimation(SwerveDrive drive){
     for(EstimatedRobotPose e : getEstimatedRobotPoses()){
       if(checkPoseError(e.estimatedPose.toPose2d(), drive.getPose())){
@@ -45,9 +53,13 @@ public class Vision
       drive.addVisionMeasurement(e.estimatedPose.toPose2d(), e.timestampSeconds);
     }
   }
+  /**
+   * checks if positional and rotational offset if greater than error values
+   * @param a first post
+   * @param b second post
+   * @return if positional or rotational offset are greater than error
+   */
   private boolean checkPoseError(Pose2d a, Pose2d b) {
     return a.getTranslation().getDistance(b.getTranslation()) >= maxError || a.getRotation().minus(b.getRotation()).getDegrees() > maxRotError;
   }
-    
-  
 }

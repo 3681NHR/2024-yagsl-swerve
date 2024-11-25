@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * list of rumble objects that plays in order. like ControllerRumble, but for small sequences that are added to main que
+ */
 public class RumbleSequence implements RumbleBase{
     public List<Rumble> rumbles;
     private double duration = 0.0;
     private double currentStrength = 0.0;
     private Rumble currentRumble;
+    private RumblePosition currentPos = RumblePosition.BOTH;
 
     public RumbleSequence(ArrayList<Rumble> rumbles){
         this.rumbles = rumbles;
@@ -77,8 +81,13 @@ public class RumbleSequence implements RumbleBase{
                 duration += r.getTime();
             }
             currentStrength = currentRumble.getStrength();
+            currentPos = currentRumble.getPosition();
         } else {
             currentStrength = 0;
         }
+    }
+    @Override
+    public RumblePosition getPosition() {
+        return currentPos;
     }
 }

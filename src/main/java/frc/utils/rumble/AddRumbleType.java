@@ -1,6 +1,9 @@
 package frc.utils.rumble;
 
-public enum RumbleType{
+/**
+ * how to add time to rumble que
+ */
+public enum AddRumbleType{
     /** 
      * replaces all rumble data
      */

@@ -2,6 +2,9 @@ package frc.utils;
 
 import edu.wpi.first.math.MathUtil;
 
+/**
+ * additional math functions
+ */
 public final class ExtraMath {
     
   /**
@@ -31,14 +34,35 @@ public final class ExtraMath {
     return out;
   }
 
+  /**
+   * remaps val from range of in values, to range of out values
+   * @param val
+   * @param inMin
+   * @param inMax
+   * @param outMin
+   * @param outMax
+   * @return
+   */
   public static double remap(double val, double inMin, double inMax, double outMin, double outMax){
     return ((val-inMin)/(inMax-inMin)*(outMax-outMin))+outMin;
   }
 
+  /**
+   * linear interpolation between start and end
+   * @param start
+   * @param end
+   * @param val position(0-1)
+   * @return output
+   */
   public static double lerp(double start, double end, double val){
     return (end-start)*val + start;
   }
 
+  /**
+   * prevents in from being negitive
+   * @param in
+   * @return if in>=0, in. if in<0, 0
+   */
   public static double holdPositive(double in){
     return in<0 ? 0 : in;
   }

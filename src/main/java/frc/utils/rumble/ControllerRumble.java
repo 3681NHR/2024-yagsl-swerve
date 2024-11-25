@@ -4,15 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.GenericHID;
 
+/**
+ * handler for rumble on xbox controller
+ */
 public class ControllerRumble {
     private XboxController controller;
     List<RumbleBase> rumbles = new ArrayList<>();
     public ControllerRumble(XboxController controller){
         this.controller = controller;
     }
-    public void addRumble(double time, double power, RumbleType type){
+    /**
+     * adds a new rumble to the rumble que
+     * @param time length of rumble
+     * @param power power of rumble
+     * @param type how to add to que
+     */
+    public void addRumble(double time, double power, AddRumbleType type){
         switch (type) {
             case OVERRIDE:
                 rumbles.clear();
@@ -53,7 +63,12 @@ public class ControllerRumble {
         }
     }
     
-    public void addRumble(RumbleSequence rumble, RumbleType type){
+    /**
+     * add rumble sequence to rumble que
+     * @param rumble sequence to add
+     * @param type how to add to que
+     */
+    public void addRumble(RumbleSequence rumble, AddRumbleType type){
         switch (type) {
             case OVERRIDE:
                 rumbles.clear();
@@ -93,10 +108,18 @@ public class ControllerRumble {
                 break;
         }
     }
+    
+    /**
+     * clears the rumble que and stops controller rumble
+     */
     public void clearRumble(){
         rumbles.clear();
-        controller.setRumble(edu.wpi.first.wpilibj.GenericHID.RumbleType.kBothRumble, 0);
+        controller.setRumble(RumbleType.kBothRumble, 0);
     }
+
+    /**
+     * advance que by 0.02 seconds and performes timelessupdate
+     */
     public void update(){
         if(rumbles.size() > 0){
             rumbles.get(0).subtractTime(0.02);
@@ -105,7 +128,11 @@ public class ControllerRumble {
         timelessUpdate();
         
     }
-    //update without changing time values
+    /**
+     * main update. does not change time values.
+     * removes any completed rumbles and ends rumble if there are no rumbles in que
+     * also updates controller rumble state
+     */
     public void timelessUpdate(){
         if(rumbles.size() > 0){
             if(rumbles.get(0).getTime() <= 0){
@@ -113,9 +140,9 @@ public class ControllerRumble {
             }
         }
         if(rumbles.size() > 0){
-            controller.setRumble(GenericHID.RumbleType.kBothRumble, rumbles.get(0).getStrength());
+            controller.setRumble(rumbles.get(0).getPosition().asNativeEnum(), rumbles.get(0).getStrength());
         } else {
-            controller.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+            controller.setRumble(RumbleType.kBothRumble, 0);
         }
     }
 }

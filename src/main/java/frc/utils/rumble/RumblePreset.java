@@ -1,5 +1,8 @@
 package frc.utils.rumble;
 
+/**
+ * preset rumble sequences
+ */
 public enum RumblePreset {
     /**
      * single pulse
@@ -14,6 +17,9 @@ public enum RumblePreset {
      */
     RING;
 
+    /**
+     * @return rumble Sequence for preset selected
+     */
     public RumbleSequence load(){
         RumblePreset rumble = this;
         switch (rumble) {
