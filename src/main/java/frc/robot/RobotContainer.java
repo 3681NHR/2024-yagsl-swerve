@@ -110,8 +110,8 @@ public class RobotContainer {
       rstGyro.onTrue(Commands.runOnce(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
 
       //rumble bindings for lockpose and reset gyro
-      lockPose.whileTrue(Commands.runOnce(() -> rumbler.addRumble(0.1, 0.1, AddRumbleType.OVERLAY)).repeatedly());
-      rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(RumblePreset.TAP.load(), AddRumbleType.OVERLAY)));
+      //kl;lockPose.whileTrue(Commands.runOnce(() -> rumbler.addRumble(0.1, 0.1, AddRumbleType.OVERLAY)).repeatedly());
+      //rstGyro.onTrue(Commands.runOnce(() -> rumbler.addRumble(RumblePreset.TAP.load(), AddRumbleType.OVERLAY)));
 
       //rumble binding when time remaining is low
       new Trigger(() -> TimerHandler.getTeleopRemaining()<30.0).or(

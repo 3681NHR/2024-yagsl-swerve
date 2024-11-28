@@ -19,7 +19,7 @@ public class Vision
 
   private Camera[] cameras = {
     new Camera.builder()
-              .withPosition(new Translation3d(0, 14, 6))
+              .withPosition(new Translation3d(0, 0, 0))
               .withAngle(new Rotation3d())
               .withCamera(new PhotonCamera("front"))
               .withField(layout)
@@ -34,12 +34,12 @@ public class Vision
    * get all estimated robot poses from cameras
    * @return poses
    */
-  public EstimatedRobotPose[] getEstimatedRobotPoses(){
+  public ArrayList<EstimatedRobotPose> getEstimatedRobotPoses(){
     ArrayList<EstimatedRobotPose> poses = new ArrayList<>();
     for(Camera c : cameras){
       poses.add(c.update());
     }
-    return (EstimatedRobotPose[]) poses.toArray();
+    return poses;
   }
   /**
    * update pose estimation for all cameras and adds result to YAGSL swerve drive estimation
@@ -47,10 +47,12 @@ public class Vision
    */
   public void updatePoseEstimation(SwerveDrive drive){
     for(EstimatedRobotPose e : getEstimatedRobotPoses()){
-      if(checkPoseError(e.estimatedPose.toPose2d(), drive.getPose())){
-        System.err.println("pose error over "+maxError+" meters or over "+maxRotError+" degrees. WARNING: mesurement is still being added to odometry");
+      if(e != null){
+        if(checkPoseError(e.estimatedPose.toPose2d(), drive.getPose())){
+          System.err.println("pose error over "+maxError+" meters or over "+maxRotError+" degrees. WARNING: mesurement is still being added to odometry");
+        }
+        drive.addVisionMeasurement(e.estimatedPose.toPose2d(), e.timestampSeconds);
       }
-      drive.addVisionMeasurement(e.estimatedPose.toPose2d(), e.timestampSeconds);
     }
   }
   /**

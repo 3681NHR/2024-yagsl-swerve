@@ -27,7 +27,7 @@ public class Camera {
         this.camera = b.camera;
         this.layout = b.layout;
 
-        poseEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(translation, angle));   
+        poseEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, new Transform3d(translation, angle));   
     }
     public static class builder{
         private AprilTagFieldLayout layout;
@@ -39,7 +39,7 @@ public class Camera {
             layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
             angle = new Rotation3d();
             translation = new Translation3d();
-            camera = new PhotonCamera("");
+            camera = new PhotonCamera("front");
         }
 
         public builder withAngle(Rotation3d rot){
