@@ -21,7 +21,7 @@ public class Vision
   private Camera[] cameras = {
     new Camera.builder()
               .withPosition(new Translation3d(0, Units.inchesToMeters(15), Units.inchesToMeters(6)))
-              .withAngle(new Rotation3d(20, 0, 0))
+              .withAngle(new Rotation3d(0, 0, 0))//pitch is yaw
               .withCamera(new PhotonCamera("front"))
               .withField(layout)
               .build(),

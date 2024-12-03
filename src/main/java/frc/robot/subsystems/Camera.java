@@ -77,7 +77,6 @@ public class Camera {
      */
     public EstimatedRobotPose update(){
         var out = poseEstimator.update();
-        SmartDashboard.putBoolean(camera.getName()+" connected", camera.isConnected());
         if(out.isPresent()){
             return out.get();
         } else {
