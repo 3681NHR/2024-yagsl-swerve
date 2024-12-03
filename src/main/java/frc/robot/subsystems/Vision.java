@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import swervelib.SwerveDrive;
 
 public class Vision
@@ -19,8 +20,8 @@ public class Vision
 
   private Camera[] cameras = {
     new Camera.builder()
-              .withPosition(new Translation3d(0, 0, 0))
-              .withAngle(new Rotation3d())
+              .withPosition(new Translation3d(0, Units.inchesToMeters(15), Units.inchesToMeters(6)))
+              .withAngle(new Rotation3d(20, 0, 0))
               .withCamera(new PhotonCamera("front"))
               .withField(layout)
               .build(),
