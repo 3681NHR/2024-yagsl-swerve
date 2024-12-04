@@ -1,8 +1,8 @@
 # 2024-yagsl-swerve
  - PR all fetures to dev unless you have explicit aproval from an admin and the code has been tested on the robot
- - stable will always be fully functional on-robot
- - dev will often be functional on-robot
- - PRs from dev to stable require admin review and must pass all tests on the robot
+ - stable branch will always be fully functional on-robot
+ - dev branch will often be functional on-robot
+ - PRs from dev to stable require admin review and **must pass all tests on the robot**
 ## what does what
 
 - Main.java - dont touch
@@ -52,20 +52,20 @@ handles bindings and input
  - confirm all rumble ques are called and have correct output
  - confirm correct dashboard layout
      
- - ### dashboard
-      - confirm correct timer values
-            - up time
-            - dynamic remaining
-            - auto and teleop remaining
-            - auto and teleop up time
-            - auto and teleop total
-            - auto and teleop start times
-            - correct coloring
+- ### dashboard
+    - confirm correct timer values
+        - up time
+        - dynamic remaining
+        - auto and teleop remaining
+        - auto and teleop up time
+        - auto and teleop total
+        - auto and teleop start times
+        - correct coloring
         
-        -confirm widgets:
-            - camera feeds
-            - odometry field
-            - fod/direct angle indicators
-            - pdp
-            - swerve widget
+    - confirm widgets:
+        - camera feeds
+        - odometry field
+        - fod/direct angle indicators
+        - pdp
+        - swerve widget
    
