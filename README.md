@@ -1,6 +1,6 @@
 # 2024-yagsl-swerve
 
-## what does what?!?!?!?!
+## what does what
 
 - Main.java - dont touch
 - Robot.java - rarely used
@@ -10,6 +10,10 @@ handles bindings and input
 - subsystems
     - Vision.java - handles PhotonVision
     - SwerveDriveSubsystem.java - handles swerve drive
+ 
+ - utils
+     - common across most repos
+     - generic functions     
 
 ## notes
 
@@ -22,18 +26,7 @@ handles bindings and input
     - advantagescope has a button for this
     - others need to set the ip to "localhost"
 
-
 ## todo
  - auto aim buttons
  - prox commands
  - rot snap buttons
- 
- ### at next meet
- - photon
- - camera calib
- - camera mount
- - pid(f) tuning
- - test haptics
- - talk about MEC
- - talk about website on github/using code-only website
- - 
