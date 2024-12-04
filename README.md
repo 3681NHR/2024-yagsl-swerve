@@ -2,7 +2,7 @@
  - PR all fetures to dev unless you have explicit aproval from an admin and the code has been tested on the robot
  - stable will always be fully functional on-robot
  - dev will often be functional on-robot
- - PRs from dev to stable require admin review and must pass all test on the robot
+ - PRs from dev to stable require admin review and must pass all tests on the robot
 ## what does what
 
 - Main.java - dont touch
