@@ -21,6 +21,15 @@ this document is meant to save as much info compiled over time by members of the
        - 16h5: larger grid. larger range, more false positives, ~32 ids
        - 36h11: smaller grid. less range, less false positives. ~256 ids
 
+**driver controller is port 0, assign controller or keyboard to port 0 in order to control**
+
+ - when in simulator, swerve takes raw buttons and axis for input, this allows simulation to work with both xbox controller and keyboard
+ - remember us check "map gamepad" in simulatior if using controleler
+ - using keyboard in simulator requires sim GUI window to have focus
+ - to connect dashboards to simulator
+    - advantagescope has a button for this
+    - others need to set the ip to "localhost"
+
  - complex and abstract systems/lockouts need an override in case of failure(ex. a lockout that prevents launching something until the launcher is up to speed needs a button or toggle in dashboard that allows launching whenever. otherwise if an encoder fails, you *cant* score)
  - build failing with error "cant find symbol" and filenames, class names, packages, imports, and autocorrect are right. deleting .class files under build directory might fix
  - ### CamelCase
