@@ -1,5 +1,6 @@
 package frc.utils;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -14,13 +15,13 @@ public class TimerHandler {
 
     public static void updateTeleop(){
         SmartDashboard.putNumber("time/teleop/UpTime"       , Timer.getFPGATimestamp()-teleopStart);
-        SmartDashboard.putNumber("time/teleop/RemainingTime", ExtraMath.holdPositive(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart)));
-        SmartDashboard.putNumber("time/RemainingTime", ExtraMath.holdPositive(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart)));
+        SmartDashboard.putNumber("time/teleop/RemainingTime", MathUtil.clamp(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart), 0, 10000));
+        SmartDashboard.putNumber("time/RemainingTime", MathUtil.clamp(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart), 0, 100000));
     }
     public static void updateAuto(){
         SmartDashboard.putNumber("time/auto/UpTime"       , Timer.getFPGATimestamp()-autoStart);
-        SmartDashboard.putNumber("time/auto/RemainingTime", ExtraMath.holdPositive(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart)));
-        SmartDashboard.putNumber("time/RemainingTime", ExtraMath.holdPositive(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart)));
+        SmartDashboard.putNumber("time/auto/RemainingTime", MathUtil.clamp(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart), 0, 100000));
+        SmartDashboard.putNumber("time/RemainingTime", MathUtil.clamp(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart), 0, 100000));
     }
     public static void initTeleop(){
         teleopStart = Timer.getFPGATimestamp();
@@ -49,14 +50,14 @@ public class TimerHandler {
     } 
     public static double getTeleopRemaining(){
         if(teleopStart > 0){
-            return ExtraMath.holdPositive(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart));
+            return MathUtil.clamp(Constants.TELEOP_TIME-(Timer.getFPGATimestamp()-teleopStart), 0, 100000);
         } else {
             return Constants.TELEOP_TIME;
         }
     }
     public static double getAutoRemaining(){
         if(autoStart > 0){
-            return ExtraMath.holdPositive(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart));
+            return MathUtil.clamp(Constants.AUTO_TIME-(Timer.getFPGATimestamp()-autoStart), 0, 100000);
         } else {
             return Constants.AUTO_TIME;
         }

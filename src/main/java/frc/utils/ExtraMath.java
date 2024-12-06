@@ -58,12 +58,4 @@ public final class ExtraMath {
     return (end-start)*val + start;
   }
 
-  /**
-   * prevents in from being negitive
-   * @param in
-   * @return if in>=0, in. if in<0, 0
-   */
-  public static double holdPositive(double in){
-    return in<0 ? 0 : in;
-  }
 }
