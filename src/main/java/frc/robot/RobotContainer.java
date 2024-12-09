@@ -41,9 +41,11 @@ public class RobotContainer {
   private PowerDistribution pdp = new PowerDistribution();
 
   public RobotContainer() {
+    SmartDashboard.putBoolean("Vision enabled", true);
     configureBindings();
 
     SmartDashboard.putData("PDP", pdp);
+
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     //direct angle selects if right stick should control robot angle
@@ -88,6 +90,9 @@ public class RobotContainer {
       SmartDashboard.putBoolean("reset odometry", false);
       swerveDriveSubsystem.resetOdometry(new Pose2d());
     }));
+
+    new Trigger(() -> SmartDashboard.getBoolean("Vision enabled", false)).onTrue(Commands.runOnce(() -> swerveDriveSubsystem.setVision(true)));
+    new Trigger(() -> SmartDashboard.getBoolean("Vision enabled", false)).onFalse(Commands.runOnce(() -> swerveDriveSubsystem.setVision(false)));
 
     //bindings depend of if using simulation
     if(RobotBase.isReal()){
