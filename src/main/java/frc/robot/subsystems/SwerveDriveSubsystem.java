@@ -51,9 +51,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.MACHINE;
 
     setupPathPlanner();
+    drive.stopOdometryThread();
     if (visionOn){
       //stop odometry so updates cam be synced with vision updates
-      drive.stopOdometryThread();
       setupPhotonVision();
     }
     resetOdometry(Constants.STARTING_POSE);
@@ -69,9 +69,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //update drive and vision manualy
+    drive.updateOdometry();
     if(visionOn){
-      //update drive and vision manualy
-      drive.updateOdometry();
       vision.updatePoseEstimation(drive);
     }
   }
@@ -166,6 +166,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d initialHolonomicPose){
     drive.resetOdometry(initialHolonomicPose);
+  }
+  public void setVision(boolean enabled){
+    visionOn = enabled;
   }
 
   /** 
