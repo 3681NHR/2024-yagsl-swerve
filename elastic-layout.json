@@ -5,242 +5,14 @@
     {
       "name": "Teleoperated",
       "grid_layout": {
-        "layouts": [
-          {
-            "title": "List Layout",
-            "x": 20.0,
-            "y": 440.0,
-            "width": 400.0,
-            "height": 480.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "Motors",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 280.0,
-                "height": 420.0,
-                "type": "Alerts",
-                "properties": {
-                  "topic": "/SmartDashboard/Motors",
-                  "period": 0.02
-                }
-              },
-              {
-                "title": "Encoders",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 280.0,
-                "height": 420.0,
-                "type": "Alerts",
-                "properties": {
-                  "topic": "/SmartDashboard/Encoders",
-                  "period": 0.02
-                }
-              },
-              {
-                "title": "JSON",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 280.0,
-                "height": 420.0,
-                "type": "Alerts",
-                "properties": {
-                  "topic": "/SmartDashboard/JSON",
-                  "period": 0.02
-                }
-              },
-              {
-                "title": "Configuration",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 280.0,
-                "height": 420.0,
-                "type": "Alerts",
-                "properties": {
-                  "topic": "/SmartDashboard/Configuration",
-                  "period": 0.02
-                }
-              },
-              {
-                "title": "Swerve Drive",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 280.0,
-                "height": 420.0,
-                "type": "Alerts",
-                "properties": {
-                  "topic": "/SmartDashboard/Swerve Drive",
-                  "period": 0.02
-                }
-              }
-            ]
-          },
-          {
-            "title": "auto",
-            "x": 1160.0,
-            "y": 140.0,
-            "width": 140.0,
-            "height": 300.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "StartTime",
-                "x": 880.0,
-                "y": 480.0,
-                "width": 200.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/auto/StartTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 0,
-                  "yellow_start_time": 0
-                }
-              },
-              {
-                "title": "UpTime",
-                "x": 820.0,
-                "y": 500.0,
-                "width": 200.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/auto/UpTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 0,
-                  "yellow_start_time": 0
-                }
-              },
-              {
-                "title": "RemainingTime",
-                "x": 800.0,
-                "y": 540.0,
-                "width": 200.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/auto/RemainingTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 5,
-                  "yellow_start_time": 8
-                }
-              },
-              {
-                "title": "TotalTime",
-                "x": 820.0,
-                "y": 560.0,
-                "width": 200.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/auto/TotalTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 0,
-                  "yellow_start_time": 0
-                }
-              }
-            ]
-          },
-          {
-            "title": "teleop",
-            "x": 1300.0,
-            "y": 140.0,
-            "width": 140.0,
-            "height": 300.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "StartTime",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 140.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/teleop/StartTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 0,
-                  "yellow_start_time": 0
-                }
-              },
-              {
-                "title": "UpTime",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 140.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/teleop/UpTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 0,
-                  "yellow_start_time": 0
-                }
-              },
-              {
-                "title": "RemainingTime",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 140.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/teleop/RemainingTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 15,
-                  "yellow_start_time": 30
-                }
-              },
-              {
-                "title": "TotalTime",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 140.0,
-                "height": 140.0,
-                "type": "Match Time",
-                "properties": {
-                  "topic": "/SmartDashboard/time/teleop/TotalTime",
-                  "period": 0.02,
-                  "data_type": "double",
-                  "time_display_mode": "Minutes and Seconds",
-                  "red_start_time": 0,
-                  "yellow_start_time": 0
-                }
-              }
-            ]
-          }
-        ],
+        "layouts": [],
         "containers": [
           {
             "title": "Auto Chooser",
-            "x": 900.0,
-            "y": 0.0,
+            "x": 20.0,
+            "y": 320.0,
             "width": 260.0,
-            "height": 140.0,
+            "height": 120.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto Chooser",
@@ -252,8 +24,8 @@
             "title": "Field",
             "x": 20.0,
             "y": 0.0,
-            "width": 880.0,
-            "height": 440.0,
+            "width": 620.0,
+            "height": 320.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -269,10 +41,10 @@
           },
           {
             "title": "swerve",
-            "x": 900.0,
-            "y": 140.0,
+            "x": 1260.0,
+            "y": 0.0,
             "width": 260.0,
-            "height": 300.0,
+            "height": 320.0,
             "type": "YAGSL Swerve Drive",
             "properties": {
               "topic": "/SmartDashboard/swerve",
@@ -284,8 +56,8 @@
           },
           {
             "title": "fod",
-            "x": 840.0,
-            "y": 440.0,
+            "x": 640.0,
+            "y": 260.0,
             "width": 140.0,
             "height": 140.0,
             "type": "Boolean Box",
@@ -301,8 +73,8 @@
           },
           {
             "title": "direct angle",
-            "x": 980.0,
-            "y": 440.0,
+            "x": 780.0,
+            "y": 260.0,
             "width": 140.0,
             "height": 140.0,
             "type": "Boolean Box",
@@ -317,35 +89,11 @@
             }
           },
           {
-            "title": "PDP",
-            "x": 1440.0,
-            "y": 0.0,
-            "width": 400.0,
-            "height": 500.0,
-            "type": "PowerDistribution",
-            "properties": {
-              "topic": "/SmartDashboard/PDP",
-              "period": 0.06
-            }
-          },
-          {
-            "title": "FMSInfo",
-            "x": 420.0,
-            "y": 440.0,
-            "width": 420.0,
-            "height": 140.0,
-            "type": "FMSInfo",
-            "properties": {
-              "topic": "/FMSInfo",
-              "period": 0.02
-            }
-          },
-          {
             "title": "upTime",
-            "x": 1120.0,
-            "y": 440.0,
-            "width": 140.0,
-            "height": 140.0,
+            "x": 640.0,
+            "y": 140.0,
+            "width": 280.0,
+            "height": 120.0,
             "type": "Match Time",
             "properties": {
               "topic": "/SmartDashboard/time/upTime",
@@ -358,7 +106,7 @@
           },
           {
             "title": "RemainingTime",
-            "x": 1160.0,
+            "x": 640.0,
             "y": 0.0,
             "width": 280.0,
             "height": 140.0,
@@ -370,6 +118,24 @@
               "time_display_mode": "Minutes and Seconds",
               "red_start_time": 15,
               "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "photonvision_Port_1184_Output_MJPEG_Server",
+            "x": 920.0,
+            "y": 0.0,
+            "width": 340.0,
+            "height": 320.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1184_Output_MJPEG_Server",
+              "period": 0.06,
+              "compression": 44,
+              "fps": 60,
+              "resolution": [
+                180.0,
+                140.0
+              ]
             }
           }
         ]

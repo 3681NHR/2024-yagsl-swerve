@@ -50,7 +50,7 @@ public final class Constants {
     public static final double MAX_SPEED = Units.feetToMeters(15); //max drive speed, m/s
 
     public static final boolean STARTING_FOD = true;
-    public static final boolean STARTING_DIRECT_ANGLE = true;
+    public static final boolean STARTING_DIRECT_ANGLE = false;
   }
 
   public static final class AutoConstants
